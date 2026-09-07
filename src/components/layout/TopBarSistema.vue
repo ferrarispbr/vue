@@ -1,9 +1,11 @@
 <template>
+    <div class="top-bar-system">
+        <button class="top-bar-system__menu-button" type="button" aria-label="Abrir ou recolher menu">
+            <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
 
-    <div>
-
-        ☰ Sistema de Controle de Estoque
-
+        <span class="top-bar-system__title">
+            Sistema de Controle de Estoque
+        </span>
     </div>
-
 </template>

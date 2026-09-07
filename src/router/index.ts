@@ -1,6 +1,7 @@
-import {createRouter, createWebHistory} from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
-import ProdutoListagemView              from '@/views/ProdutoListagemView.vue';
+import LayoutPreviewView from '@/views/LayoutPreviewView.vue'
+import ProdutoListagemView from '@/views/ProdutoListagemView.vue';
 
 export const router = createRouter({
     history: createWebHistory(
@@ -10,6 +11,11 @@ export const router = createRouter({
     routes: [
         {
             path: '/',
+            name: 'layout-preview',
+            component: LayoutPreviewView,
+        },
+        {
+            path: '/produtos',
             name: 'produtos',
             component: ProdutoListagemView
         }

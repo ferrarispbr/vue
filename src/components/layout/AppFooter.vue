@@ -1,9 +1,3 @@
 <template>
-
-    <div>
-
-        Rodapé
-
-    </div>
-
+    <footer class="app-footer"></footer>
 </template>

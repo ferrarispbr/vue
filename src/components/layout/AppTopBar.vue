@@ -1,18 +1,11 @@
 <script setup lang="ts">
-
-import TopBarUsuario from './TopBarUsuario.vue';
-import TopBarSistema from './TopBarSistema.vue';
-
+    import TopBarSistema from './TopBarSistema.vue'
+    import TopBarUsuario from './TopBarUsuario.vue'
 </script>
 
 <template>
-
-    <div class="app-topbar">
-
+    <header class="app-top-bar">
         <TopBarUsuario />
-
         <TopBarSistema />
-
-    </div>
-
+    </header>
 </template>
