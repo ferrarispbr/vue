@@ -90,6 +90,9 @@ Por isso:
 >
 > Não existe um único comportamento de “recolher menu”. Temos duas interações
 > diferentes: **recolher/restaurar no desktop** e **abrir/fechar no mobile**.
+> Essa diferença será refletida nas variáveis de estado e no CSS.
+
+---
 
 ## 2. 🏗️ Arquitetura visual do layout
 
@@ -117,6 +120,7 @@ flowchart TD
 
     AppMenu --> MenuUser["TopBarUsuario<br/>instância para mobile"]
 ```
+
 ### 📐 Organização na tela desktop
 
 ```
@@ -133,8 +137,8 @@ flowchart TD
 
 ### 📱 Organização na tela mobile
 
-> No mobile, TopBarUsuario não aparece na barra superior. 
-> Ele é exibido dentro de AppMenu quando o painel lateral é aberto
+No mobile, `TopBarUsuario` não aparece na barra superior. Ele é exibido dentro
+de `AppMenu` quando o painel lateral é aberto.
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
@@ -169,11 +173,13 @@ Ao clicar em ☰:
 | `AppContent`    | Reserva a área principal para as páginas da aplicação.       |
 | `AppFooter`     | Ocupa a área inferior da coluna principal.                   |
 
-> 💡 Por que TopBarUsuario aparece duas vezes na arquitetura?
+> 💡 Por que `TopBarUsuario` aparece duas vezes na arquitetura?
 >
-> Não são dois componentes diferentes. 
-> É o mesmo componente reutilizado em dois locais: na barra superior no desktop e dentro do painel lateral no mobile. 
+> Não são dois componentes diferentes. É o mesmo componente reutilizado em
+> dois locais: na barra superior no desktop e dentro do painel lateral no mobile.
 > O CSS define qual instância será visível em cada tamanho de tela.
+
+---
 
 ## 3. 🔄 Caminho completo do clique no botão `☰`
 
@@ -202,10 +208,11 @@ flowchart TD
     Desktop --> View
     View --> CSS
 ```
+
 ### 📤 A ação sobe pelos componentes
 
-> O clique começa em TopBarSistema e sobe até AppLayout.
->
+O clique começa em `TopBarSistema` e sobe até `AppLayout`.
+
 | Etapa | Componente      | Ação                                            |
 | ----: | --------------- | ----------------------------------------------- |
 |     1 | `TopBarSistema` | Detecta o clique no botão `☰`.                  |
@@ -213,28 +220,29 @@ flowchart TD
 |     3 | `AppTopBar`     | Recebe esse evento e o encaminha.               |
 |     4 | `AppLayout`     | Recebe o evento final e executa `toggleMenu()`. |
 
-### 🧠 A decisão acontece em AppLayout
+### 🧠 A decisão acontece em `AppLayout`
 
-> AppLayout verifica a largura atual da tela:
+`AppLayout` verifica a largura atual da tela:
 
-• abaixo de 992px: abre ou fecha o painel mobile;
-• a partir de 992px: recolhe ou restaura o menu desktop.
+- abaixo de `992px`: abre ou fecha o painel mobile;
+- a partir de `992px`: recolhe ou restaura o menu desktop.
 
-> Essa decisão não deve ficar em TopBarSistema ou em AppMenu.
+Essa decisão não deve ficar em `TopBarSistema` ou em `AppMenu`.
 
-> 💡 Por que AppLayout toma a decisão?
+> 💡 Por que `AppLayout` toma a decisão?
 
-> Porque ele é o único componente que enxerga simultaneamente o topo, o menu 
-e a área de conteúdo. Ele também é o dono do estado que define como todo o
-layout deve se comportar.
+> Porque ele é o único componente que enxerga simultaneamente o topo, o menu
+> e a área de conteúdo. Ele também é o dono do estado que define como todo o
+> layout deve se comportar.
 
 ### 📥 O resultado desce para os componentes
 
-> Depois que AppLayout altera uma variável de estado, o Vue atualiza a tela:
+Depois que `AppLayout` altera uma variável de estado, o Vue atualiza a tela:
 
-• no desktop, uma classe é adicionada ou removida em AppLayout;
-• no mobile, AppMenu recebe uma propriedade informando se deve ficar aberto;
-• o CSS interpreta essas classes e propriedades para alterar largura, textos,posição e visibilidade.
+- no desktop, uma classe é adicionada ou removida em `AppLayout`;
+- no mobile, `AppMenu` recebe uma propriedade informando se deve ficar aberto;
+- o CSS interpreta essas classes e propriedades para alterar largura, textos,
+  posição e visibilidade.
 
 ### 🔑 Regra de arquitetura utilizada
 
