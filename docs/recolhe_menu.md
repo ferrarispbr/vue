@@ -1502,7 +1502,7 @@ a altura do topo mudasse.
 
 > #### ⚠️ Atenção
 >
-> `--layout-sidebar-width` é a variável mais importante para o recolhimento
+> `layout-sidebar-width` é a variável mais importante para o recolhimento
 > desktop. Quando a classe `app-layout--menu-collapsed` é aplicada, ela muda
 > esse valor para `--layout-sidebar-collapsed-width`.
 
@@ -1745,19 +1745,262 @@ Elas evitam que conteúdos grandes forcem a coluna a ultrapassar a área
 disponível, causando rolagem horizontal ou aumentando indevidamente a altura
 do layout.
 
-> 💡 Por que essa organização é útil?
+> #### 💡 Por que essa organização é útil?
 >
 > Ela preserva a barra lateral até o fim da tela e mantém o rodapé alinhado
 > apenas com a área principal da aplicação. Esse é o comportamento visual que
 > definimos para o projeto.
 
-> ⚠️ Atenção
+> #### ⚠️ Atenção
 >
 > Se `AppFooter` fosse colocado diretamente em `AppLayout`, ele ocuparia toda
 > a largura da página, inclusive abaixo do menu. Isso produziria uma arquitetura
 > visual diferente da que foi planejada.
 
+---
+---
 
+## 25. 🏷️ Classe dinâmica do menu recolhido no desktop
 
+No elemento principal de `AppLayout`, usamos uma classe dinâmica:
 
+```vue
+<div
+    class="app-layout"
+    :class="{ 'app-layout--menu-collapsed': isDesktopMenuCollapsed }"
+>
+```
 
+A classe `app-layout` está sempre presente.
+
+A classe `app-layout--menu-collapsed` depende do valor de
+`isDesktopMenuCollapsed`.
+
+#### 🔍 Como o Vue decide a classe?
+
+```vue
+:class="{ 'app-layout--menu-collapsed': isDesktopMenuCollapsed }"
+```
+
+A leitura é:
+
+```text
+Adicione a classe app-layout--menu-collapsed
+quando isDesktopMenuCollapsed for true.
+```
+
+| Valor de `isDesktopMenuCollapsed` | Classes aplicadas no elemento raiz |
+|---|---|
+| `false` | `app-layout` |
+| `true` | `app-layout app-layout--menu-collapsed` |
+
+#### 🔄 Ligação com `toggleMenu()`
+
+No desktop, a função altera esta variável:
+
+```ts
+isDesktopMenuCollapsed.value = !isDesktopMenuCollapsed.value
+```
+
+O Vue percebe a alteração e atualiza a classe do elemento raiz.
+
+```text
+Clique em ☰ no desktop
+        ↓
+toggleMenu() alterna isDesktopMenuCollapsed
+        ↓
+Vue atualiza a classe de AppLayout
+        ↓
+CSS identifica app-layout--menu-collapsed
+        ↓
+Menu muda visualmente
+```
+
+> #### 💡 Por que a classe é aplicada em `AppLayout`?
+>
+> O recolhimento afeta mais de uma área: `TopBarUsuario`, `AppMenu` e a largura
+> disponível para o conteúdo. Aplicar uma classe no componente raiz permite
+> que o CSS alcance todas essas regiões de forma organizada.
+
+#### 🔑 Convenção de nome
+
+ `app-layout--menu-collapsed` usa o padrão `bloco--modificador`.
+
+ - `app-layout`: o bloco principal;
+ - `menu-collapsed`: a variação de estado desse bloco.
+
+ Esse padrão torna o CSS mais fácil de ler e evita nomes genéricos como
+ `ativo`, `aberto` ou `escondido`.
+
+---
+---
+
+## 26. ↔️ Alterando a largura do menu recolhido
+
+Quando `AppLayout` recebe a classe `app-layout--menu-collapsed`, esta regra CSS
+é ativada:
+
+```css
+.app-layout--menu-collapsed {
+    --layout-sidebar-width: var(--layout-sidebar-collapsed-width);
+}
+```
+
+#### 🔍 O que essa regra faz?
+
+Ela não altera diretamente a largura de `AppMenu`.
+
+Em vez disso, ela redefine o valor da variável:
+
+```css
+--layout-sidebar-width
+```
+
+| Estado do layout | Valor de `--layout-sidebar-width` |
+|---|---:|
+| Menu completo | `16rem` |
+| Menu recolhido | `4.5rem` |
+
+#### 🔄 Como a nova largura chega ao layout?
+
+As duas grades estruturais usam essa mesma variável:
+
+```css
+.app-top-bar {
+    grid-template-columns: var(--layout-sidebar-width) minmax(0, 1fr);
+}
+```
+
+```css
+.app-layout__workspace {
+    grid-template-columns: var(--layout-sidebar-width) minmax(0, 1fr);
+}
+```
+
+Quando a classe de recolhimento redefine a variável no elemento raiz, o novo
+valor é herdado pelos elementos internos.
+
+```text
+AppLayout recebe app-layout--menu-collapsed
+        ↓
+--layout-sidebar-width muda para 4.5rem
+        ↓
+AppTopBar usa a nova largura
+        ↓
+AppMenu usa a nova largura
+        ↓
+TopBarUsuario e menu lateral permanecem alinhados
+```
+
+ #### 🔑 Conceito CSS: cascata e herança de variáveis
+
+ Propriedades personalizadas CSS podem ser declaradas em um elemento pai e
+ utilizadas pelos descendentes. Quando o valor é redefinido em um contexto
+ mais específico, os componentes internos passam a usar o novo valor.
+
+> #### 💡 Por que esta solução é melhor que alterar várias larguras?
+>
+> Uma única alteração atualiza todas as regiões que dependem da largura do
+> menu. Isso reduz duplicação, evita desalinhamento e facilita ajustes futuros.
+
+> #### ⚠️ Atenção
+>
+> A regra só reduz a coluna. Ela não oculta textos nem centraliza ícones.
+> Essas outras alterações são feitas por regras CSS específicas, que veremos
+> nos próximos tópicos.
+
+---
+---
+
+## 27. 👁️ Menu recolhido: ocultando textos e centralizando ícones
+
+Depois de reduzir a largura da coluna, o CSS precisa adaptar seu conteúdo.
+
+As regras do estado recolhido são:
+
+```css
+.app-layout--menu-collapsed .top-bar-user {
+    justify-content: center;
+}
+
+.app-layout--menu-collapsed .top-bar-user span,
+.app-layout--menu-collapsed .app-menu__label {
+    display: none;
+}
+
+.app-layout--menu-collapsed .app-menu__item {
+    justify-content: center;
+}
+```
+
+#### 🔍 Como ler esse seletor?
+
+```css
+.app-layout--menu-collapsed .app-menu__label
+```
+
+A leitura é:
+
+```text
+Quando um elemento com a classe app-menu__label estiver dentro de um
+elemento com a classe app-layout--menu-collapsed, aplique esta regra.
+```
+
+Esse tipo de seletor permite que os elementos mantenham sua estrutura normal,
+mas mudem de aparência apenas quando o layout estiver recolhido.
+
+#### 📝 Ocultando os textos
+
+```css
+.app-layout--menu-collapsed .top-bar-user span,
+.app-layout--menu-collapsed .app-menu__label {
+    display: none;
+}
+```
+
+| Elemento ocultado | Conteúdo |
+|---|---|
+| `.top-bar-user span` | Texto do usuário na barra superior. |
+| `.app-menu__label` | Textos dos itens do menu, como HOME e Listar Produtos. |
+
+A propriedade abaixo remove esses elementos da apresentação visual:
+
+```css
+display: none;
+```
+
+Os ícones não recebem essa regra. Por isso, permanecem visíveis.
+
+#### 🎯 Centralizando o conteúdo restante
+
+```css
+.app-layout--menu-collapsed .top-bar-user {
+    justify-content: center;
+}
+```
+
+Centraliza o ícone do usuário dentro da área menor de `TopBarUsuario`.
+
+```css
+.app-layout--menu-collapsed .app-menu__item {
+    justify-content: center;
+}
+```
+
+Centraliza o ícone de cada item dentro do menu lateral recolhido.
+
+#### 🔑 Por que `justify-content` funciona aqui?
+
+`.top-bar-user` e `.app-menu__item` usam `display: flex`. Em um contêiner
+Flexbox, `justify-content: center` centraliza o conteúdo no eixo horizontal.
+
+> #### 💡 Resultado visual
+>
+> O menu não desaparece no desktop. Ele se transforma em uma barra estreita de
+> ícones, preservando a navegação e liberando mais espaço para o conteúdo.
+
+> #### ⚠️ Atenção
+>
+> Essas regras pertencem ao modo desktop. No mobile, precisamos restaurar os
+> textos e o alinhamento à esquerda quando o menu abrir como painel. Isso será
+> tratado dentro da media query.
