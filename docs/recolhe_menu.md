@@ -1356,7 +1356,7 @@ e manipular a lista de classes manualmente.
 
 No template de `AppLayout`, existe um botão sem conteúdo visual:
 
-```vue
+```html
 <button
     v-if="isMobileMenuOpen"
     @click="toggleMenu"
@@ -1502,7 +1502,7 @@ a altura do topo mudasse.
 
 > #### ⚠️ Atenção
 >
-> `layout-sidebar-width` é a variável mais importante para o recolhimento
+> `--layout-sidebar-width` é a variável mais importante para o recolhimento
 > desktop. Quando a classe `app-layout--menu-collapsed` é aplicada, ela muda
 > esse valor para `--layout-sidebar-collapsed-width`.
 
@@ -1778,7 +1778,7 @@ A classe `app-layout--menu-collapsed` depende do valor de
 
 #### 🔍 Como o Vue decide a classe?
 
-```vue
+```html 
 :class="{ 'app-layout--menu-collapsed': isDesktopMenuCollapsed }"
 ```
 
@@ -2004,3 +2004,593 @@ Flexbox, `justify-content: center` centraliza o conteúdo no eixo horizontal.
 > Essas regras pertencem ao modo desktop. No mobile, precisamos restaurar os
 > textos e o alinhamento à esquerda quando o menu abrir como painel. Isso será
 > tratado dentro da media query.
+
+---
+---
+
+## 28. 📱 Media query: ativando o modo mobile
+
+As regras específicas para telas menores ficam dentro desta media query:
+
+```css
+@media (max-width: 991.98px) {
+    /* Regras aplicadas somente no mobile e tablet. */
+}
+```
+
+#### 🔍 O que é uma media query?
+
+Uma **media query** permite aplicar CSS apenas quando uma condição da tela for
+verdadeira.
+
+Neste caso:
+
+```css
+(max-width: 991.98px)
+```
+
+significa:
+
+```text
+Aplique as regras internas quando a largura da tela for
+igual ou menor que 991.98px.
+```
+
+| Largura da tela | Regras dentro da media query |
+|---:|:----|
+| `360px` | Aplicadas |
+| `768px` | Aplicadas |
+| `991px` | Aplicadas |
+| `992px` | Não aplicadas |
+| `1440px` | Não aplicadas |
+
+#### 🔗 Ligação entre CSS e JavaScript
+
+A media query usa o mesmo ponto de corte da variável criada em `AppLayout`:
+
+```ts
+window.matchMedia('(max-width: 991.98px)')
+```
+
+```css
+@media (max-width: 991.98px) {
+    /* regras mobile */
+}
+```
+
+Assim, as duas partes da solução concordam:
+
+| Parte | Responsabilidade |
+|---|---|
+| JavaScript | Decide se o clique deve abrir o painel mobile ou recolher o menu desktop. |
+| CSS | Decide qual aparência deve ser aplicada à tela atual. |
+
+> #### 💡 Por que o mesmo breakpoint é importante?
+>
+> Se JavaScript e CSS usassem limites diferentes, poderíamos ter uma tela em
+> que o JavaScript executa o comportamento mobile, mas o CSS ainda exibe o
+> layout desktop. Isso causaria falhas visuais e comportamento inconsistente.
+
+> #### ⚠️ Atenção
+>
+> As regras dentro da media query não substituem o CSS desktop por completo.
+> Elas apenas sobrescrevem as propriedades que precisam mudar no modo mobile.
+
+---
+---
+
+#### 29. 📲 Mobile: removendo a coluna lateral fixa
+
+Dentro da media query, estas regras substituem a estrutura desktop:
+
+```css
+.app-top-bar {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.top-bar-user {
+    display: none;
+}
+
+.app-layout__workspace {
+    grid-template-columns: minmax(0, 1fr);
+}
+```
+
+#### 🔍 O que muda no topo?
+
+No desktop, o topo possui duas colunas:
+
+```text
+[ TopBarUsuario ][ TopBarSistema ]
+```
+
+No mobile, esta regra remove a primeira coluna:
+
+```css
+grid-template-columns: minmax(0, 1fr);
+```
+
+O resultado é uma única coluna, ocupada por `TopBarSistema`.
+
+```text
+[ TopBarSistema: ☰ Sistema de Controle de Estoque ]
+```
+
+#### 👤 Por que `TopBarUsuario` é ocultado?
+
+```css
+.top-bar-user {
+    display: none;
+}
+```
+
+No mobile, manter as informações do usuário no topo consumiria espaço
+horizontal importante.
+
+O mesmo componente `TopBarUsuario` aparece dentro de `AppMenu` quando o
+painel é aberto. Assim, a informação continua disponível sem sobrecarregar o
+cabeçalho.
+
+> #### 💡 Importante
+>
+> Essa regra oculta apenas a instância de `TopBarUsuario` presente no topo.
+> Mais adiante, outra regra mobile torna visível a instância que fica dentro
+> de `AppMenu`.
+
+#### 🧱 O que muda na área de trabalho?
+
+No desktop, a área de trabalho possui duas colunas:
+
+```text
+[ AppMenu ][ Coluna principal ]
+```
+
+No mobile:
+
+```css
+.app-layout__workspace {
+    grid-template-columns: minmax(0, 1fr);
+}
+```
+
+A área passa a ter somente uma coluna: a coluna principal com conteúdo e
+rodapé.
+
+`AppMenu` deixa de ocupar espaço dentro da grade. Ele será transformado em um
+painel fixo.
+
+> #### ⚠️ Atenção
+>
+> No mobile, o menu não foi removido da aplicação. Apenas deixou de participar
+> da grade normal do layout para poder aparecer temporariamente sobre o
+> conteúdo.
+
+---
+---
+
+## 30. 📌 Mobile: `AppMenu` como painel lateral fixo
+
+No modo mobile, `AppMenu` deixa de ser uma coluna da grade e passa a ser um
+painel fixo sobre o conteúdo:
+
+```css
+.app-menu {
+    display: block;
+    position: fixed;
+    top: var(--layout-top-bar-height);
+    bottom: 0;
+    left: 0;
+    width: min(18rem, 85vw);
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+}
+```
+
+#### 🧩 Posição e tamanho do painel
+
+| Propriedade | Efeito |
+|---|---|
+| `position: fixed` | Retira o menu da grade e fixa sua posição em relação à janela do navegador. |
+| `top: var(--layout-top-bar-height)` | Faz o painel começar logo abaixo da barra superior. |
+| `bottom: 0` | Faz o painel alcançar a parte inferior da tela. |
+| `left: 0` | Posiciona o painel na borda esquerda. |
+| `width: min(18rem, 85vw)` | Define uma largura confortável, sem ocupar toda a tela em dispositivos estreitos. |
+
+#### 📏 Entendendo `min(18rem, 85vw)`
+
+A função CSS `min()` escolhe o menor valor entre os informados.
+
+```css
+width: min(18rem, 85vw);
+```
+
+| Situação | Largura usada |
+|---|---|
+| Tela ampla | Até `18rem`. |
+| Tela estreita | No máximo `85vw`, preservando uma faixa visível do conteúdo. |
+
+`vw` significa porcentagem da largura da janela do navegador.
+
+Por exemplo, em uma tela com `360px` de largura:
+
+```text
+85vw = 306px
+```
+
+O menu não ultrapassa esse espaço.
+
+#### 🙈 Estado inicial: painel fora da tela
+
+```css
+transform: translateX(-100%);
+```
+
+`translateX(-100%)` desloca o painel para a esquerda em uma distância igual à
+sua própria largura.
+
+```text
+Tela visível               Painel fechado
+┌───────────────────┐  ┌────────────────┐
+│ AppContent        │  │ AppMenu        │ ← fora da tela
+└───────────────────┘  └────────────────┘
+```
+
+O menu continua existindo, mas fica visualmente fora da área visível.
+
+#### ✨ Transição
+
+```css
+transition: transform 0.2s ease;
+```
+
+Essa regra cria uma animação suave de `0.2` segundo quando o valor de
+`transform` muda.
+
+#### 🔑 Por que usamos `transform`?
+
+ `transform` é apropriado para deslocar elementos visualmente sem recalcular
+ toda a estrutura da página. Por isso é uma escolha comum para painéis
+ laterais, menus e animações de abertura.
+
+> #### ⚠️ Atenção
+>
+> Esta regra define o estado fechado. O estado aberto será criado pela classe
+> `app-menu--open`, que altera apenas o valor de `transform`.
+
+---
+---
+
+## 31. ➡️ `app-menu--open`: trazendo o painel para a tela
+
+Quando `isOpen` recebe `true`, o Vue adiciona esta classe a `AppMenu`:
+
+```text
+app-menu--open
+```
+
+A regra CSS correspondente é:
+
+```css
+.app-menu--open {
+    transform: translateX(0);
+}
+```
+
+#### 🔄 Comparando os dois estados
+
+| Estado | Classe aplicada | `transform` | Resultado |
+|---|---|---|---|
+| Menu fechado | Apenas `app-menu` | `translateX(-100%)` | Painel fora da tela, à esquerda. |
+| Menu aberto | `app-menu app-menu--open` | `translateX(0)` | Painel na posição original, visível. |
+
+#### 🔍 O que significa `translateX(0)`?
+
+```css
+transform: translateX(0);
+```
+
+Significa não deslocar o painel horizontalmente.
+
+O menu volta para sua posição natural, encostado à esquerda da janela e abaixo
+da barra superior.
+
+```text
+Painel fechado                 Painel aberto
+┌────────────────┐            ┌────────────────┬───────────────┐
+│ AppMenu        │            │ AppMenu        │ AppContent    │
+│ fora da tela   │            │ dentro da tela │               │
+└────────────────┘            └────────────────┴───────────────┘
+```
+
+#### ✨ Por que o painel desliza?
+
+A regra base de `.app-menu` possui:
+
+```css
+transition: transform 0.2s ease;
+```
+
+Quando `transform` muda de `translateX(-100%)` para `translateX(0)`, o
+navegador anima essa mudança durante `0.2` segundo.
+
+O caminho completo é:
+
+```text
+Clique em ☰
+        ↓
+isMobileMenuOpen passa para true
+        ↓
+AppMenu recebe isOpen = true
+        ↓
+Vue adiciona app-menu--open
+        ↓
+transform muda para translateX(0)
+        ↓
+CSS executa a transição de abertura
+```
+
+> #### 💡 Por que a classe aberta altera somente `transform`?
+>
+> A posição, tamanho, camada e transição já pertencem ao estado base de
+> `.app-menu`. A classe de estado deve alterar apenas o que muda: o
+> deslocamento horizontal.
+
+> #### ⚠️ Atenção
+>
+> No fechamento, a classe `app-menu--open` é removida. O CSS volta para
+> `translateX(-100%)`, usando a mesma transição para deslizar o painel para
+> fora da tela.
+
+---
+---
+
+## 32. 🌑 CSS do backdrop e ordem das camadas
+
+No mobile, quando o backdrop existe no HTML, esta regra CSS o transforma em uma
+camada escura atrás do menu:
+
+```css
+.app-menu-backdrop {
+    display: block;
+    position: fixed;
+    top: var(--layout-top-bar-height);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 900;
+    border: 0;
+    background: rgb(0 0 0 / 25%);
+}
+```
+
+#### 📐 Área ocupada pelo backdrop
+
+```css
+top: var(--layout-top-bar-height);
+right: 0;
+bottom: 0;
+left: 0;
+```
+
+Essas quatro propriedades fazem o backdrop ocupar toda a área abaixo da barra
+superior.
+
+```text
+┌─────────────────────────────────────────────┐
+│ TopBarSistema                               │ ← não é coberta
+├─────────────────────────────────────────────┤
+│ Backdrop cobre conteúdo e rodapé            │
+│                                             │
+└─────────────────────────────────────────────┘
+```
+
+#### 🎨 Escurecimento do conteúdo
+
+```css
+background: rgb(0 0 0 / 25%);
+```
+
+Essa sintaxe define preto com `25%` de transparência.
+
+O conteúdo continua visível atrás da camada, mas fica escurecido para indicar
+que o foco está no painel lateral aberto.
+
+#### 📚 Ordem das camadas com `z-index`
+
+| Camada | `z-index` | Posição visual |
+|---|---:|---|
+| Conteúdo normal | Sem `z-index` específico | Fundo |
+| `.app-menu-backdrop` | `900` | Acima do conteúdo |
+| `.app-menu` | `1000` | Acima do backdrop |
+
+```text
+Camada superior   → AppMenu (1000)
+Camada intermediária → Backdrop (900)
+Camada inferior   → AppContent e AppFooter
+```
+
+#### 🔑 O que é `z-index`?
+
+`z-index` define a ordem de empilhamento de elementos posicionados. Quanto
+maior o valor, mais à frente o elemento aparece.
+
+#### 🔄 Relação com `v-if`
+
+Fora da media query, o CSS possui:
+
+```css
+.app-menu-backdrop {
+    display: none;
+}
+```
+
+No mobile, a regra acima muda o `display` para `block`.
+
+Ainda assim, o elemento só existe quando esta condição Vue é verdadeira:
+
+```vue
+v-if="isMobileMenuOpen"
+```
+
+| Situação | Elemento no HTML | Aparência |
+|---|---|---|
+| Menu fechado | Não existe | Não há backdrop. |
+| Menu aberto no mobile | Existe | Camada escura abaixo do menu. |
+
+> 💡 Por que não usamos apenas `display: none`?
+>
+> `v-if` evita criar o botão backdrop enquanto ele não é necessário. Isso
+> também evita que uma camada invisível interfira em cliques no conteúdo.
+
+---
+---
+
+## 33. 👤 Usuário e menu completo no painel mobile
+
+A instância de `TopBarUsuario` que fica dentro de `AppMenu` é ocultada por
+padrão:
+
+```css
+.app-menu__user {
+    display: none;
+}
+```
+
+No mobile, ela passa a ser exibida:
+
+```css
+.app-menu__user {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.app-menu__user .top-bar-user {
+    display: flex;
+}
+```
+
+#### 🔍 Resultado visual
+
+| Ambiente | Usuário no topo | Usuário dentro de `AppMenu` |
+|---|---|---|
+| Desktop | Visível | Oculto |
+| Mobile | Oculto | Visível quando o painel é aberto |
+
+A margem abaixo do usuário cria separação visual entre suas informações e os
+links de navegação:
+
+```css
+margin-bottom: 1rem;
+```
+
+#### ⚠️ Caso especial: desktop recolhido → mobile
+
+Imagine esta sequência:
+
+```text
+1. Usuário está no desktop.
+2. Clica em ☰ e recolhe o menu.
+3. Diminui a largura da janela para o modo mobile.
+```
+
+A classe `app-layout--menu-collapsed` ainda pode estar presente em
+`AppLayout`. Sem regras adicionais, ela manteria os textos ocultos e os
+ícones centralizados dentro do painel mobile.
+
+Por isso, dentro da media query, restauramos o visual completo:
+
+```css
+.app-layout--menu-collapsed .app-menu__user .top-bar-user {
+    justify-content: flex-start;
+}
+
+.app-layout--menu-collapsed .app-menu__user .top-bar-user span,
+.app-layout--menu-collapsed .app-menu__label {
+    display: inline;
+}
+
+.app-layout--menu-collapsed .app-menu__item {
+    justify-content: flex-start;
+}
+```
+
+#### 🧩 O que cada regra restaura?
+
+| Regra | Efeito no painel mobile |
+|---|---|
+| `justify-content: flex-start` | Alinha usuário e itens à esquerda. |
+| `display: inline` | Exibe novamente os textos do usuário e dos links. |
+| `.app-menu__item { justify-content: flex-start }` | Remove a centralização dos ícones. |
+
+> #### 💡 Por que essas regras são necessárias?
+>
+> O estado desktop pode continuar armazenado mesmo depois que a tela muda de
+> tamanho. As regras mobile garantem que o painel sempre seja exibido completo,
+> independentemente de o menu ter sido recolhido antes no desktop.
+
+#### 🔑 Princípio aplicado
+
+Quando dois modos responsivos possuem objetivos visuais diferentes, o CSS do
+modo mais específico deve sobrescrever regras incompatíveis do outro modo.
+
+---
+---
+
+## 34. ✅ Checklist de testes e diagnóstico
+
+Antes de considerar o menu concluído, valide os comportamentos abaixo.
+
+#### 🖥️ Testes no desktop — `992px` ou mais
+
+- [ ] O menu inicia completo, com ícones e textos.
+- [ ] Ao clicar em `☰`, o menu fica estreito e mostra somente ícones.
+- [ ] `TopBarUsuario` encolhe junto com o menu lateral.
+- [ ] `TopBarSistema` continua ocupando o espaço restante do topo.
+- [ ] Ao clicar novamente em `☰`, textos e largura normal são restaurados.
+- [ ] O rodapé continua abaixo do conteúdo, sem ocupar a área abaixo do menu.
+
+#### 📱 Testes no mobile — abaixo de `992px`
+
+- [ ] `TopBarUsuario` não aparece na barra superior.
+- [ ] O conteúdo ocupa a largura disponível.
+- [ ] O menu inicia fechado.
+- [ ] Ao clicar em `☰`, o painel desliza pela esquerda.
+- [ ] O usuário aparece no início do painel aberto.
+- [ ] Os textos dos links aparecem junto com os ícones.
+- [ ] O backdrop escurece o conteúdo, mas não cobre a barra superior.
+- [ ] Clicar no backdrop fecha o menu.
+- [ ] Clicar novamente em `☰` também fecha o menu.
+
+#### 🔄 Teste de troca de tamanho
+
+1. Abra a aplicação em uma tela desktop.
+2. Recolha o menu.
+3. Diminua a janela para menos de `992px`.
+4. Abra o painel mobile.
+
+Resultado esperado:
+
+- o painel mobile abre completo;
+- os textos permanecem visíveis;
+- os itens ficam alinhados à esquerda;
+- o menu desktop recolhido não interfere na aparência mobile.
+
+#### 🛠️ Diagnóstico de problemas comuns
+
+| Sintoma | Possível causa | Primeiro ponto a verificar |
+|---|---|---|
+| O botão `☰` não faz nada | Evento não chegou a `AppLayout`. | `@click`, `emit('toggle-menu')` e os encaminhamentos em `AppTopBar`. |
+| O menu desktop não recolhe | A classe dinâmica não foi aplicada. | `:class` em `AppLayout` e `isDesktopMenuCollapsed`. |
+| O painel mobile não abre | A `prop` não chegou a `AppMenu`. | `:is-open="isMobileMenuOpen"` e `defineProps`. |
+| O menu abre, mas não desliza | Classe ou CSS mobile não está sendo aplicado. | `app-menu--open`, `transform` e a media query. |
+| O backdrop fica sobre o menu | Ordem das camadas incorreta. | `z-index: 1000` do menu e `z-index: 900` do backdrop. |
+| Textos somem no painel mobile | Regras do desktop recolhido continuam prevalecendo. | Regras de restauração dentro da media query. |
+| Topo e menu ficam desalinhados | Larguras foram definidas em locais diferentes. | Uso de `--layout-sidebar-width` nas duas grades. |
+
+> #### 💡 Ferramenta recomendada para teste mobile
+>
+> No navegador, abra as ferramentas de desenvolvedor (`F12`) e ative o modo
+> responsivo. Teste, por exemplo, a largura `360px`, usada durante o
+> desenvolvimento deste layout.

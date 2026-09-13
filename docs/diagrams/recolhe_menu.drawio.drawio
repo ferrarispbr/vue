@@ -1,0 +1,417 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17" pages="7">
+  <diagram name="01 - Arquitetura do layout" id="FEP2tyYgA4iF-44XXDey">
+    <mxGraphModel dx="1434" dy="854" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-1" value="AppLayout&#xa;Container principal" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="466" y="20" width="198" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-2" value="AppTopBar&#xa;Agrupa as áreas do topo" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="680" y="137" width="234" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-3" value="Área de trabalho" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="243" y="145" width="182" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-4" value="AppMenu&#xa;Navegação lateral" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="20" y="253" width="189" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-5" value="Coluna principal" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="362" y="262" width="177" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-6" value="TopBarUsuario&#xa;Instância desktop" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="589" y="253" width="185" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-7" value="TopBarSistema&#xa;Botão ☰ e título" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="824" y="253" width="178" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-8" value="TopBarUsuario&#xa;Instância mobile" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="26" y="370" width="178" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-9" value="AppContent&#xa;Área das páginas" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="255" y="370" width="181" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-10" value="AppFooter&#xa;Rodapé" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="487" y="370" width="136" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-11" value="" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.87;entryX=0.5;entryY=-0.01;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-1" target="L1ZQYSI_8vS0GJ_OgK21-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="797" y="112" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-12" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.87;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-1" target="L1ZQYSI_8vS0GJ_OgK21-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="334" y="112" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-13" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.22;exitY=0.99;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-2" target="L1ZQYSI_8vS0GJ_OgK21-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="681" y="228" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-14" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.78;exitY=0.99;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-2" target="L1ZQYSI_8vS0GJ_OgK21-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="913" y="228" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-15" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-3" target="L1ZQYSI_8vS0GJ_OgK21-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="115" y="228" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-16" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.77;exitY=1.01;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-3" target="L1ZQYSI_8vS0GJ_OgK21-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="228" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-17" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-4" target="L1ZQYSI_8vS0GJ_OgK21-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-18" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.25;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-5" target="L1ZQYSI_8vS0GJ_OgK21-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L1ZQYSI_8vS0GJ_OgK21-19" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.75;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="L1ZQYSI_8vS0GJ_OgK21-5" target="L1ZQYSI_8vS0GJ_OgK21-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="555" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="VbGXRrjkUt7LAzZnKejQ" name="02-Layout desktop">
+    <mxGraphModel dx="1434" dy="854" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="wFf6XdckKJADCdjYh16f-10" value="" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="1000" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="wFf6XdckKJADCdjYh16f-11" value="&lt;div&gt;TopBarUsuario&lt;/div&gt;&lt;div&gt;Usuário · altura 4.5rem&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=left;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="160" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="wFf6XdckKJADCdjYh16f-12" value="&lt;div&gt;TopBarSistema&lt;/div&gt;&lt;div&gt;☰ Sistema de Controle de Estoque · altura 4.5rem&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=left;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="210" y="80" width="840" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="wFf6XdckKJADCdjYh16f-13" value="&lt;div&gt;AppMenu&lt;/div&gt;&lt;div&gt;Navegação lateral&lt;/div&gt;&lt;div&gt;largura 16rem&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;HOME&lt;/div&gt;&lt;div&gt;Listar Produtos&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=left;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="152" width="160" height="528" as="geometry" />
+        </mxCell>
+        <mxCell id="wFf6XdckKJADCdjYh16f-14" value="&lt;div&gt;AppContent&lt;/div&gt;&lt;div&gt;RouterView · minmax(0, 1fr)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Conteúdo&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=center;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="210" y="152" width="840" height="456" as="geometry" />
+        </mxCell>
+        <mxCell id="wFf6XdckKJADCdjYh16f-15" value="&lt;div&gt;AppFooter&lt;/div&gt;&lt;div&gt;Rodapé · altura 4.5rem&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="210" y="608" width="840" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="wFf6XdckKJADCdjYh16f-16" value="AppLayout — Layout desktop (≥ 992px) · min-height: 100vh" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=12;fontColor=default;" vertex="1" parent="1">
+          <mxGeometry x="380" y="39" width="340" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="WEQKizQ8rC206goqmdWD" name="03 - Layout mobile">
+    <mxGraphModel dx="1434" dy="854" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="79rucRzccdBBTeHf2-pC-1" value="" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="385" y="124" width="400" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="79rucRzccdBBTeHf2-pC-2" value="&lt;div&gt;TopBarSistema&lt;/div&gt;&lt;div&gt;☰ Sistema de Controle de Estoque · altura 4.5rem&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=left;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="385" y="124" width="400" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="79rucRzccdBBTeHf2-pC-3" value="&lt;div&gt;AppContent&lt;/div&gt;&lt;div&gt;RouterView · minmax(0, 1fr)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Conteúdo&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=center;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="385" y="196" width="400" height="465" as="geometry" />
+        </mxCell>
+        <mxCell id="79rucRzccdBBTeHf2-pC-4" value="&lt;div&gt;AppFooter&lt;/div&gt;&lt;div&gt;Rodapé · altura 4.5rem&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="385" y="661" width="400" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="79rucRzccdBBTeHf2-pC-5" value="AppLayout — Layout mobile (&amp;lt; 992px) · Menu fechado · min-height: 100vh" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=12;fontColor=default;" vertex="1" parent="1">
+          <mxGeometry x="375" y="84" width="420" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="qQfv-schbDWOOAW_Eguv" name="04 - Fluxo do botão ☰">
+    <mxGraphModel dx="1434" dy="854" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-1" value="Usuário clica no botão ☰" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="307" y="20" width="239" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-2" value="TopBarSistema&#xa;detecta o clique e emite toggle-menu" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="308" y="119" width="237" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-3" value="AppTopBar&#xa;recebe e encaminha toggle-menu" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="324" y="253" width="206" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-4" value="AppLayout&#xa;executa toggleMenu()" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="319" y="387" width="216" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-5" value="Tela menor que 992px?" style="rhombus;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="320" y="504" width="214" height="214" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-6" value="Altera isMobileMenuOpen" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="161" y="799" width="243" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-7" value="Altera isDesktopMenuCollapsed" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="454" y="791" width="235" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-8" value="Vue atualiza classes e propriedades" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="318" y="907" width="217" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-9" value="CSS atualiza a aparência do menu" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="298" y="1024" width="258" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-10" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-1" target="zGlGWc8f9HctyXnhvHAr-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-11" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-2" target="zGlGWc8f9HctyXnhvHAr-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-12" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-3" target="zGlGWc8f9HctyXnhvHAr-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-13" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-4" target="zGlGWc8f9HctyXnhvHAr-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-14" value="Sim" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=1;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-5" target="zGlGWc8f9HctyXnhvHAr-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="282" y="754" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-15" value="Não" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=1;entryX=0.5;entryY=-0.01;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-5" target="zGlGWc8f9HctyXnhvHAr-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="571" y="754" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-16" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1.01;entryX=0.12;entryY=0;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-6" target="zGlGWc8f9HctyXnhvHAr-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="282" y="882" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-17" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0.99;entryX=0.88;entryY=0;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-7" target="zGlGWc8f9HctyXnhvHAr-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="571" y="882" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zGlGWc8f9HctyXnhvHAr-18" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="zGlGWc8f9HctyXnhvHAr-8" target="zGlGWc8f9HctyXnhvHAr-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="OOYz49cQ-Ha_hGDN9QWg" name="05 - Menu desktop recolhido">
+    <mxGraphModel dx="1420" dy="840" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" edge="1" parent="1" source="QFiwzgUr1BDcaEvZsepN-1" target="QFiwzgUr1BDcaEvZsepN-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-1" value="Usuário clica em ☰&#xa;no desktop" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="304" y="44" width="198" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" edge="1" parent="1" source="QFiwzgUr1BDcaEvZsepN-2" target="QFiwzgUr1BDcaEvZsepN-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-2" value="AppLayout&#xa;isDesktopMenuCollapsed alterna" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="285.5" y="156" width="235" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="WYOK-1jDTh08LlP9V8oP-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" edge="1" parent="1" source="QFiwzgUr1BDcaEvZsepN-3" target="QFiwzgUr1BDcaEvZsepN-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4G2985NV3huxNg97_VCx-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" edge="1" parent="1" source="QFiwzgUr1BDcaEvZsepN-3" target="QFiwzgUr1BDcaEvZsepN-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-3" value="Vue adiciona ou remove&#xa;app-layout--menu-collapsed" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="276.5" y="286" width="253" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="GKFS8S38Nl8UkjXjIUKm-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" edge="1" parent="1" source="QFiwzgUr1BDcaEvZsepN-4" target="QFiwzgUr1BDcaEvZsepN-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-4" value="CSS redefine&#xa;--layout-sidebar-width&#xa;para 4.5rem" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="559" y="400" width="221" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="MocV1vRRcbWXV5AqzvyT-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" edge="1" parent="1" source="QFiwzgUr1BDcaEvZsepN-5" target="QFiwzgUr1BDcaEvZsepN-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-5" value="TopBarUsuario e AppMenu&#xa;encolhem e permanecem alinhados" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="560" y="551" width="219" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="MocV1vRRcbWXV5AqzvyT-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" edge="1" parent="1" source="QFiwzgUr1BDcaEvZsepN-6" target="QFiwzgUr1BDcaEvZsepN-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-6" value="Textos são ocultados&#xa;ícones são centralizados" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="28" y="402.5" width="234" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="QFiwzgUr1BDcaEvZsepN-7" value="Menu desktop recolhido&#xa;ou restaurado&#xa;Área principal ganha espaço" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="260" y="698" width="232" height="67" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="6p-NXYp9NHkHSUJNtUPj" name="06 - Menu mobile aberto">
+    <mxGraphModel dx="1420" dy="840" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-1" value="Usuário clica em ☰&#xa;no mobile" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="299" y="42" width="198" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-2" value="AppLayout&#xa;executa toggleMenu()" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="290" y="159" width="216" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-3" value="isMobileMenuOpen&#xa;alterna entre true e false" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="277" y="275" width="243" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-4" value="AppLayout envia&#xa;:is-open para AppMenu" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="158" y="392" width="224" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-5" value="AppMenu recebe&#xa;a prop isOpen" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="180" y="508" width="180" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-6" value="Vue adiciona ou remove&#xa;app-menu--open" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="154" y="625" width="232" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-7" value="CSS altera transform&#xa;painel desliza pela esquerda" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="166" y="742" width="208" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-8" value="v-if cria ou remove&#xa;app-menu-backdrop" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="424" y="750" width="204" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-9" value="Menu mobile aberto ou fechado&#xa;&#xa;Quando aberto: usuário e links&#xa;aparecem no painel" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="279" y="876" width="238" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-10" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0.99;entryX=0.5;entryY=-0.01;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-1" target="cJCK4ibJ224hFgUtLbSO-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-11" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0.99;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-2" target="cJCK4ibJ224hFgUtLbSO-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-12" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.2;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-3" target="cJCK4ibJ224hFgUtLbSO-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="270" y="367" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-13" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.8;exitY=1;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-3" target="cJCK4ibJ224hFgUtLbSO-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="526" y="367" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-14" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0.99;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-4" target="cJCK4ibJ224hFgUtLbSO-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-15" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-5" target="cJCK4ibJ224hFgUtLbSO-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-16" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0.99;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-6" target="cJCK4ibJ224hFgUtLbSO-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-17" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.14;entryY=0;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-7" target="cJCK4ibJ224hFgUtLbSO-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="270" y="851" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cJCK4ibJ224hFgUtLbSO-18" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.86;entryY=0;rounded=0;" edge="1" parent="1" source="cJCK4ibJ224hFgUtLbSO-8" target="cJCK4ibJ224hFgUtLbSO-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="526" y="851" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="eA0ZoJ12QU4yj6J3g9EL" name="07 - Camadas do menu mobile">
+    <mxGraphModel dx="1420" dy="840" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fbei6RJjdOdHUFRQiERr-1" value="" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="122" y="124" width="400" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="fbei6RJjdOdHUFRQiERr-2" value="&lt;div&gt;TopBarSistema&lt;/div&gt;&lt;div&gt;☰ Sistema de Controle de Estoque · altura 4.5rem&lt;br&gt;&lt;br&gt;Permanece acessível&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=left;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="122" y="124" width="400" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="fbei6RJjdOdHUFRQiERr-3" value="&lt;div&gt;AppContent&lt;/div&gt;&lt;div&gt;RouterView · minmax(0, 1fr)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Conteúdo&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=center;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="122" y="196" width="400" height="465" as="geometry" />
+        </mxCell>
+        <mxCell id="fbei6RJjdOdHUFRQiERr-4" value="&lt;div&gt;AppFooter&lt;/div&gt;&lt;div&gt;Rodapé · altura 4.5rem&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="122" y="661" width="400" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="fbei6RJjdOdHUFRQiERr-5" value="AppLayout — Mobile (&amp;lt; 992px) · Menu aberto e camadas · min-height: 100vh" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=12;fontColor=default;" vertex="1" parent="1">
+          <mxGeometry x="102" y="84" width="440" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fbei6RJjdOdHUFRQiERr-6" value="" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=right;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="121" y="197" width="400" height="536" as="geometry" />
+        </mxCell>
+        <mxCell id="fbei6RJjdOdHUFRQiERr-7" value="&lt;div&gt;AppMenu&lt;/div&gt;&lt;div&gt;app-menu--open · z-index: 1000&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;TopBarUsuario&lt;/div&gt;&lt;div&gt;Usuário&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;HOME&lt;/div&gt;&lt;div style=&quot;&quot;&gt;Listar Produtos&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;rounded=0;strokeColor=default;align=left;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="122" y="197" width="340" height="536" as="geometry" />
+        </mxCell>
+        <mxCell id="ZqT__HjNXJx_emwPp7FQ-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" edge="1" parent="1" source="ZqT__HjNXJx_emwPp7FQ-1" target="fbei6RJjdOdHUFRQiERr-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZqT__HjNXJx_emwPp7FQ-1" value="app-menu-backdrop&#xa;z-index: 900&#xa;&#xa;Camada intermediária.&#xa;Clique fora para fechar." style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="587" y="421" width="182" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="ZqT__HjNXJx_emwPp7FQ-5" value="Camada de fundo&#xa;&#xa;AppContent e AppFooter&#xa;z-index: auto (padrão)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="588" y="522" width="182" height="88" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
