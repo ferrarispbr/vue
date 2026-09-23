@@ -80,15 +80,49 @@ body {
 }
 
 .app-menu__item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    display: block;
 }
 
 .app-menu__item i {
     width: 1.25rem;
     text-align: center;
     font-size: 1.1rem;
+}
+
+.app-menu__link,
+.app-menu__group-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.app-menu__link.router-link-exact-active {
+    font-weight: 700;
+}
+
+.app-menu__group-icon {
+    width: auto !important;
+    margin-left: auto;
+    transition: transform 0.2s ease;
+}
+
+.app-menu__group-button[aria-expanded="true"] .app-menu__group-icon {
+    transform: rotate(180deg);
+}
+
+.app-menu__sublist {
+    margin: 0.25rem 0 0;
+    padding: 0 0 0 1.5rem;
+    list-style: none;
 }
 
 .app-menu__user {
@@ -117,8 +151,14 @@ body {
     display: none;
 }
 
-.app-layout--menu-collapsed .app-menu__item {
+.app-layout--menu-collapsed .app-menu__link,
+.app-layout--menu-collapsed .app-menu__group-button {
     justify-content: center;
+}
+
+.app-layout--menu-collapsed .app-menu__group-icon,
+.app-layout--menu-collapsed .app-menu__sublist {
+    display: none;
 }
 
 /* ----------------------- config para telas menores --------------------------------------- */
@@ -182,7 +222,8 @@ body {
         display: inline;
     }
 
-    .app-layout--menu-collapsed .app-menu__item {
+    .app-layout--menu-collapsed .app-menu__link,
+    .app-layout--menu-collapsed .app-menu__group-button {
         justify-content: flex-start;
     }
 }

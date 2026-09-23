@@ -20,14 +20,23 @@ function toggleMenu()
 
     isDesktopMenuCollapsed.value = !isDesktopMenuCollapsed.value
 }
+
+function closeMobileMenu()
+{
+    if (mobileBreakpoint.matches)
+    {
+        isMobileMenuOpen.value = false
+    }
+}
+
 </script>
 
 <template>
     <div class="app-layout" :class="{'app-layout--menu-collapsed':isDesktopMenuCollapsed,}">
         <AppTopBar @toggle-menu="toggleMenu" />
-        <button v-if="isMobileMenuOpen" @click="toggleMenu" class="app-menu-backdrop" type="button" aria-label="Fechar menu"></button>
+        <button v-if="isMobileMenuOpen" @click="closeMobileMenu" class="app-menu-backdrop" type="button" aria-label="Fechar menu"></button>
         <div class="app-layout__workspace">
-            <AppMenu :is-open="isMobileMenuOpen" />
+            <AppMenu :is-open="isMobileMenuOpen" @navigate="closeMobileMenu"/>
             <div class="app-layout__main-column">
                 <AppContent />
                 <AppFooter />
