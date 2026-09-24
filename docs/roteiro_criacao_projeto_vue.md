@@ -3,15 +3,11 @@
 > Um guia prático para entender como a aplicação atual foi organizada e como
 > recriar cada parte do zero.
 
----
-
 ## 🎯 Pergunta central do guia
 
 > **Se eu fosse construir esta parte do zero, por onde começo e por quê?**
 
 Cada tópico responderá essa pergunta usando os arquivos reais deste projeto.
-
----
 
 ## 🧩 Premissas
 
@@ -24,8 +20,6 @@ Este guia parte das seguintes condições:
   será usada como exemplo;
 - cada parte do código será explicada pelo que faz, por que existe e onde se
   encaixa na aplicação.
-
----
 
 ## 🧭 Ordem de estudo
 
@@ -143,14 +137,50 @@ Quando a página precisa de dados: View → Service → HTTP → API
 navegação, regras de negócio, chamadas HTTP e tratamento de dados ao mesmo
 tempo.
 
----
 
 # 2. 🚀 Ponto de entrada da aplicação: `main.ts`
 
+## Antes do `main.ts`: `index.html`
+
+O navegador abre primeiro o arquivo `index.html`.
+
+Ele não contém toda a interface do sistema. 
+
+Sua função é oferecer o ponto onde a aplicação Vue será exibida e informar qual arquivo deve iniciar o Vue.
+
+### Partes importantes
+
+```html
+<div id="app"></div>
+
+<script type="module" src="/src/main.ts"></script>
+```
+
+| Código                                               | Responsabilidade                                     |
+| ---------------------------------------------------- | ---------------------------------------------------- |
+| `<div id="app"></div>`                               | Espaço da página onde o Vue renderizará a aplicação. |
+| `<script type="module" src="/src/main.ts"></script>` | Carrega o arquivo que inicia a aplicação Vue.        |
+
+### Fluxo inicial
+```
+Navegador abre index.html
+↓
+Carrega src/main.ts
+↓
+O Vue é iniciado
+↓
+A aplicação é exibida dentro de <div id="app"></div>
+```
+
+index.html não cria o menu, as páginas ou os produtos. 
+
+Ele apenas inicia esse fluxo.
+
 O arquivo `main.ts` é executado quando a aplicação Vue é aberta no navegador.
 
-Ele não cria a tela de produtos, o menu ou o layout. Sua responsabilidade é
-preparar a aplicação e conectá-la ao elemento HTML onde o Vue será renderizado.
+Ele não cria a tela de produtos, o menu ou o layout.
+
+Sua responsabilidade é preparar a aplicação e conectá-la ao elemento HTML onde o Vue será renderizado.
 
 ## 🎯 Por onde começar
 
@@ -413,6 +443,7 @@ Vue renderiza App.vue dentro dessa div
         ↓
 App.vue renderiza os demais componentes
 ```
+
 ## 🔍 O que o Vue substitui?
 
 Depois de `app.mount('#app')`, o Vue controla o conteúdo interno dela.
@@ -454,13 +485,11 @@ No `main.ts`, o Vue recebe este componente:
 ```ts
 const app = createApp(App)
 ```
-Depois que a aplicação é montada no elemento #app, o Vue renderiza o conteúdo
-de `App.vue`.
+Depois que a aplicação é montada no elemento #app, o Vue renderiza o conteúdo de `App.vue`.
 
-## 🎯 Responsabilidade neste projeto
+## 📋 Responsabilidade neste projeto
 
-Neste projeto, App.vue não possui menu, cabeçalho, rodapé, rotas ou regras de
-produtos.
+Neste projeto, App.vue não possui menu, cabeçalho, rodapé, rotas ou regras de produtos.
 
 Ele tem uma responsabilidade simples:
 
@@ -471,8 +500,7 @@ renderiza AppLayout.vue
     ↓
 AppLayout organiza toda a estrutura visual da aplicação
 ```
-Essa escolha é boa porque evita transformar App.vue em um arquivo grande que
-concentra responsabilidades demais
+Essa escolha é boa porque evita transformar App.vue em um arquivo grande que concentra responsabilidades demais
 
 ## 🔍 Entendendo o código
 
@@ -527,7 +555,173 @@ Para chegar ao App.vue atual, primeiro precisamos ter criado `AppLayout.vue`.
 ```
 > 🔑 App.vue é a porta de entrada da interface. 
 >
-> Neste projeto, ele delega a construção visual para AppLayout.vue.
+> Ele delega a construção visual para AppLayout.vue.
+
+---
+
+# 4. 🖥️ Layout principal: `AppLayout.vue`
+
+## 📋 Responsabilidade
+
+`AppLayout.vue` organiza a estrutura visual comum da aplicação.
+
+Ele define onde ficam:
+
+- topo;
+- menu;
+- área principal de conteúdo;
+- rodapé.
+
+Ele não precisa conter toda a implementação dessas partes. Sua função é reunir os
+componentes responsáveis por cada uma delas.
+
+## ⚙️ Componentes utilizados
+
+```ts
+import AppContent from './AppContent.vue'
+import AppFooter from './AppFooter.vue'
+import AppMenu from './AppMenu.vue'
+import AppTopBar from './AppTopBar.vue'
+```
+O ./ significa que os arquivos estão na mesma pasta de AppLayout.vue: `src/components/layout/`
+
+| Componente   | Responsabilidade                                    |
+| ------------ | --------------------------------------------------- |
+| `AppTopBar`  | Representa o topo da aplicação.                     |
+| `AppMenu`    | Representa o menu de navegação.                     |
+| `AppContent` | Representa a área onde a página atual será exibida. |
+| `AppFooter`  | Representa o rodapé.                                |
+
+> AppLayout.vue importa esses componentes porque ele decide onde cada um aparecerá na estrutura geral da tela.
+
+## 📐 Início da estrutura visual
+
+No início do `<template>`, temos:
+
+```html
+<div class="app-layout" :class="{ 'app-layout--menu-collapsed': isDesktopMenuCollapsed }" >
+    <AppTopBar @toggle-menu="toggleMenu" />
+```
+A `<div class="app-layout">` é o contêiner principal de todo o layout.
+
+Dentro dela, o primeiro componente exibido é:
+
+```html
+<AppTopBar />
+```
+> Ele representa o topo da aplicação.
+> 
+> O trecho `:class` e o evento `@toggle-menu` estão relacionados ao comportamento de recolher ou abrir o menu. 
+
+A estrutura inicial:
+
+```
+AppLayout
+└── AppTopBar
+```
+
+## 🖥️ Área de trabalho do layout
+
+Depois do topo, o `AppLayout` organiza o menu e a coluna principal:
+
+```html
+<div class="app-layout__workspace">
+    <AppMenu :is-open="isMobileMenuOpen" @navigate="closeMobileMenu" />
+    <div class="app-layout__main-column">
+        <AppContent />
+        <AppFooter />
+    </div>
+</div>
+```
+A estrutura é:
+
+```
+AppLayout
+├── AppTopBar
+└── Área de trabalho
+    ├── AppMenu
+    └── Coluna principal
+        ├── AppContent
+        └── AppFooter
+```
+
+| Componente   | Função dentro do layout |
+| ------------ | ----------------------- |
+| `AppMenu`    | Exibe o menu lateral.   |
+| `AppContent` | Exibe a página atual.   |
+| `AppFooter`  | Exibe o rodapé.         |
+
+> A div com a classe app-layout__main-column agrupa o conteúdo e o rodapé na mesma coluna, à direita do menu.
+> 
+> Os trechos `:is-open`e `@navigate` tratam o comportamento do menu em telas menores. 
+
+## 🖐️ Fundo de fechamento do menu mobile
+
+Entre o topo e a área de trabalho existe este botão:
+
+```html
+<button 
+    v-if="isMobileMenuOpen"  @click="closeMobileMenu" class="app-menu-backdrop" type="button" aria-label="Fechar menu" >
+</button>
+```
+
+Esse botão é o fundo escurecido que aparece atrás do menu quando ele é aberto em telas menores.
+
+Ele não possui texto porque sua função é apenas permitir que a pessoa clique fora do menu para fechá-lo.
+
+| Trecho                      | Responsabilidade                                        |
+| --------------------------- | ------------------------------------------------------- |
+| `v-if="isMobileMenuOpen"`   | Exibe o fundo somente quando o menu mobile está aberto. |
+| `@click="closeMobileMenu"`  | Fecha o menu quando o fundo é clicado.                  |
+| `class="app-menu-backdrop"` | Aplica o estilo visual do fundo.                        |
+
+> ⚠️ Atenção
+>
+> A variável `isMobileMenuOpen` e a função `closeMobileMenu` serão explicadas na parte de lógica do AppLayout.vue.
+
+## 🧠 Lógica do layout
+
+No início do bloco `<script setup>`, existe este import:
+
+```ts
+import { ref } from 'vue'
+```
+
+A `ref` é uma função do Vue usada para criar valores que podem mudar enquanto a aplicação está sendo usada.
+
+No `AppLayout.vue`, ela será usada para controlar, por exemplo:
+
+- se o menu mobile está aberto;
+- se o menu desktop está recolhido.
+
+Quando um desses valores muda, o Vue atualiza a interface que depende dele.
+
+## 🏷️ Identificação de tela mobile
+
+```ts
+const mobileBreakpoint = window.matchMedia('(max-width: 991.98px)')
+```
+
+Essa linha pergunta ao navegador se a tela atual possui, no máximo, `991.98px` de largura.
+
+Quando a condição for verdadeira, o projeto considera que está no modo `mobile`.
+
+O resultado fica guardado em `mobileBreakpoint`. 
+
+Depois, o código consulta:
+
+```ts
+mobileBreakpoint.matches
+```
+
+
+
+
+
+
+
+
+
 
 
 
