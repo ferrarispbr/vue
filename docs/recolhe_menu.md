@@ -429,9 +429,9 @@ Neste caso, quando isMobileMenuOpen muda, o Vue
 >
 > Dentro do código TypeScript, o valor da ref é acessado por .value.
 
-	```ts
-	isMobileMenuOpen.value = !isMobileMenuOpen.value
-	```
+```ts
+    sMobileMenuOpen.value = !isMobileMenuOpen.value
+```
 >Já no `<template>` , o Vue permite usar `isMobileMenuOpen`sem escrever .value.
 
 ---
