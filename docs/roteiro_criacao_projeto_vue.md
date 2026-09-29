@@ -2524,6 +2524,9 @@ class="bi bi-box-seam"
 
 O título é exibido por interpolação:` {{ item.titulo }}`
 
+Se o item possuir: `titulo: 'Listar Produtos'`
+
+O texto mostrado será: `Listar Produtos`
 
 
 
@@ -2536,3 +2539,224 @@ O título é exibido por interpolação:` {{ item.titulo }}`
 
 
 
+
+
+## 📂 Item com submenu: botão de grupo
+
+Quando o item não possui uma rota, mas possui filhos, ele é renderizado como um botão:
+
+```html
+<button
+    v-else-if="hasChildren"
+        type="button"
+        class="app-menu__group-button"
+        :aria-expanded="isExpanded"
+        :aria-label="`Alternar submenu ${item.titulo}`"
+        @click="toggleGroup"
+>
+```
+A condição para isso acontecer: `v-else-if="hasChildren"`
+
+Seu significado:
+> 📌 Se o item não possui rota, mas possui filhos, renderize o botão de grupo.
+
+Exemplo:
+```ts
+{
+    id: 'produtos',
+    titulo: 'Produtos',
+    filhos: [
+        { id: 'produtos-listar', titulo: 'Listar Produtos', rota: '/produtos' },
+        { id: 'produtos-cadastrar', titulo: 'Cadastrar Produto', rota: '/produtos/cadastrar' },
+    ],
+}
+```
+> 📌 Nesse caso, `hasChildren` será `true`, então o item `Produtos` será um botão que abre ou fecha seus filhos.
+
+| Trecho | Função |
+| --- | --- |
+| `type="button"` | Define um botão comum, sem envio de formulário. |
+| `class="app-menu__group-button"` | Aplica os estilos visuais do grupo. |
+| `:aria-expanded="isExpanded"` | Informa a leitores de tela se o submenu está aberto (`true`) ou fechado (`false`). |
+| `:aria-label="`Alternar submenu ${item.titulo}`"` | Cria uma descrição dinâmica, como “Alternar submenu Produtos”. |
+| `@click="toggleGroup"` | Executa a função que abre ou fecha o submenu. |
+
+Temos o seguinte fluxo:
+```
+Pessoa clica em Produtos
+        ↓
+toggleGroup() é executada
+        ↓
+isExpanded muda de false para true
+        ↓
+o submenu Produtos é exibido
+```
+
+## 🎨 Conteúdo visual do botão de grupo
+
+Dentro do botão, são exibidos três elementos:
+
+```html
+<i v-if="item.icone"
+        :class="['bi', item.icone]"
+        aria-hidden="true">
+</i>
+
+<span class="app-menu__label"> {{ item.titulo }} </span>
+
+<i class="bi bi-chevron-down app-menu__group-icon" aria-hidden="true"></i>
+```
+Os dois primeiros elementos funcionam como nos links simples: `ícone opcional + título do grupo`
+
+O último ícone é uma seta fixa: `<i class="bi bi-chevron-down app-menu__group-icon"></i>`
+
+- `bi` `bi-chevron-down` exibe a seta para baixo do Bootstrap Icons;
+- `app-menu__group-icon` aplica o estilo próprio da seta no projeto;
+- `aria-hidden="true"` informa que a seta é decorativa e não precisa ser lida por leitores de tela.
+
+A estrutura visual do grupo fica assim: `[ícone] Produtos                         [seta]`
+
+O componente já informa o estado real do submenu com: `:aria-expanded="isExpanded"`
+
+> 📌 A rotação, troca de posição ou outro efeito visual da seta depende do CSS. 
+> 
+> No código atual, o `ícone permanece` `bi-chevron-down;` o CSS pode ser usado depois para girá-lo quando `isExpanded` for `true`.
+
+## 🌳 Renderização recursiva dos submenus
+
+O submenu é exibido somente quando o item possui filhos e está aberto:
+
+```html
+<ul
+    v-if="hasChildren && isExpanded"
+    class="app-menu__sublist"
+>
+```
+A condição possui duas partes:
+
+- hasChildren = true  → existem itens filhos
+- isExpanded = true   → o grupo foi aberto pela pessoa
+
+Somente quando as duas forem verdadeiras o `<ul>` é renderizado.
+
+Dentro dessa lista, o componente renderiza novamente a si mesmo:
+```html
+<AppMenuItem
+    v-for="child in item.filhos"
+        :key="child.id"
+        :item="child"
+        :level="level + 1"
+        @navigate="notifyNavigation"
+/>
+```
+Isso se chama *recursão*: um componente usa a si mesmo para tratar uma estrutura que pode se repetir.
+
+O fluxo é:
+```
+AppMenuItem de nível 1 recebe um item com filhos
+            ↓
+renderiza AppMenuItem para cada filho
+            ↓
+cada filho recebe nível 2
+            ↓
+se algum filho também tiver filhos, ele repete o mesmo processo
+            ↓
+os novos itens recebem nível 3
+```
+Exemplo:
+
+```
+Produtos                         nível 1
+├── Listar Produtos              nível 2
+├── Cadastrar Produto            nível 2
+└── Categorias                   nível 2
+    ├── Listar Categorias        nível 3
+    └── Cadastrar Categoria      nível 3
+```
+Cada trecho possui essa função:
+| Trecho | Função |
+| --- | --- |
+| `v-for="child in item.filhos"` | Cria um `AppMenuItem` para cada filho do item atual. |
+| `:key="child.id"` | Dá uma identificação única a cada filho. |
+| `:item="child"` | Envia os dados do filho para a nova instância do componente. |
+| `:level="level + 1"` | Aumenta o nível do menu para aplicar o recuo e os estilos adequados. |
+| `@navigate="notifyNavigation"` | Recebe o evento de navegação de um filho e o repassa para o componente pai. |
+
+Esse é o motivo de não ser necessário criar componentes separados como:
+```
+MenuNivel1.vue
+MenuNivel2.vue
+MenuNivel3.vue
+```
+> 📌 Um único AppMenuItem.vue atende todos os níveis, porque ele recebe o nível atual e pode renderizar seus próprios filhos.
+
+## 📝 Resumo geral: item de menu com níveis e submenus
+
+`AppMenuItem.vue` é um componente reutilizável que recebe um item de navegação e decide como renderizá-lo.
+
+Ele trata dois cenários:
+- item com rota → renderiza RouterLink
+- item com filhos → renderiza botão de grupo e, quando aberto, renderiza um submenu
+
+### Dados recebidos
+```ts
+item: MenuItem
+level?: number
+```
+- item contém título, ícone, rota e possíveis filhos;
+- level informa a profundidade do item no menu;
+- o nível inicial é 1.
+```
+nível 1 → item principal
+nível 2 → submenu
+nível 3 → sub-submenu
+```
+
+### Estado local
+Cada item com filhos controla o próprio estado: `const isExpanded = ref(false)`
+```
+false → submenu fechado
+true  → submenu aberto
+```
+A função abaixo alterna esse estado:
+```ts
+function toggleGroup() {
+    isExpanded.value = !isExpanded.value
+}
+```
+
+### Valor calculado
+```ts
+const hasChildren = computed(() =>
+    Boolean(props.item.filhos?.length)
+)
+```
+Esse valor identifica se o item atual possui filhos e deve se comportar como grupo.
+
+#### Componentes recursivos
+Quando o item possui filhos e está aberto, o componente renderiza novos `AppMenuItem`:
+```html
+<AppMenuItem
+    v-for="child in item.filhos"
+    :key="child.id"
+    :item="child"
+    :level="level + 1"
+    @navigate="notifyNavigation"
+/>
+```
+Esse padrão permite criar quantos níveis forem necessários sem repetir componentes.
+```
+AppMenuItem recebe um item com filhos
+            ↓
+renderiza AppMenuItem para cada filho
+            ↓
+cada filho pode repetir a mesma lógica
+```
+
+### Comunicação de navegação
+
+Quando uma pessoa clica em um link:
+- A configuração define a estrutura do menu.
+- AppMenu percorre os itens.
+- AppMenuItem renderiza cada item.
+- O próprio AppMenuItem renderiza os filhos quando existirem.
