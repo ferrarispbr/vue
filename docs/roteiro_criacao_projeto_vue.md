@@ -569,17 +569,17 @@ Para chegar ao App.vue atual, primeiro precisamos ter criado `AppLayout.vue`.
 
 ## 📋 Responsabilidade
 
-`AppLayout.vue` organiza a estrutura visual comum da aplicação.
+O `AppLayout.vue` organiza a estrutura visual comum da aplicação.
 
 Ele define onde ficam:
-
 - topo;
 - menu;
 - área principal de conteúdo;
 - rodapé.
 
-Ele não precisa conter toda a implementação dessas partes. Sua função é reunir os
-componentes responsáveis por cada uma delas.
+Ele não precisa conter toda a implementação dessas partes. 
+
+Sua função é reunir os componentes responsáveis por cada uma delas.
 
 ## ⚙️ Componentes utilizados
 
@@ -690,6 +690,7 @@ Ele não possui texto porque sua função é apenas permitir que a pessoa clique
 > ⚠️ Atenção
 >
 > A variável `isMobileMenuOpen` e a função `closeMobileMenu` serão explicadas na parte de lógica do AppLayout.vue.
+
 ## 🧠 Lógica do layout
 
 No início do bloco `<script setup>`, existe este import:
@@ -785,6 +786,7 @@ O `!` inverte o valor atual:
 - `true  → false`
 
 Em variáveis criadas com ref, o valor é acessado e alterado por meio de `.value` dentro do código TypeScript.
+
 ## ❌ Função para fechar o menu mobile
 
 ```ts
@@ -806,6 +808,7 @@ Ela é usada em dois momentos:
 > No desktop, ela não faz nada.
 >
 > O menu lateral não funciona como um painel que abre e fecha sobre o conteúdo.
+
 ## 🔀 Fluxo do menu no `AppLayout.vue`
 
 O `AppLayout.vue` concentra o estado e as funções que controlam o menu.
@@ -823,6 +826,7 @@ O Vue atualiza as classes e os componentes do template
              ↓
 O CSS exibe, oculta ou recolhe o menu
 ```
+
 ## 🏁 Conclusão
 
 >`AppLayout.vue` não contém o conteúdo detalhado do topo, menu ou rodapé.
@@ -1190,6 +1194,7 @@ Esse fluxo é sempre de cima para baixo:
 ```
 Pai → filho
 ```
+
 ### Comunicação do filho para o pai: eventos com emit
 Quando algo acontece dentro de um componente filho por exemplo, um clique ele pode avisar o pai por meio de um evento emitido.
 
@@ -1357,6 +1362,7 @@ Sua estrutura visual é:
     </span>
 </div>
 ```
+
 ## 📡 Declaração e emissão do evento
 
 No bloco `<script setup>`, o componente declara o evento que poderá emitir:
@@ -2028,7 +2034,7 @@ Sem o `:`, o Vue enviaria o texto literal `item`:
 item="item"
 ```
 
-## 📤 Evento de navegação recebido do item
+## 📢 Evento de navegação recebido do item
 
 Cada `AppMenuItem` pode emitir o evento `navigate`.
 
@@ -2240,23 +2246,283 @@ No `<template>`, o Vue permite usar diretamente:
 - `item`
 - `level`
 
+## 🧰 Imports usados pelo componente
 
+No início de `AppMenuItem.vue`, temos:
 
+```ts
+import { computed, ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import type { MenuItem } from '@/interfaces/MenuItem'
+```
+| Import | Função |
+| --- | --- |
+| `ref` | Cria um estado que pode mudar, como saber se um grupo está aberto ou fechado. |
+| `computed` | Cria um valor calculado a partir de outros dados. |
+| `RouterLink` | Cria links internos entre as páginas da aplicação. |
+| `MenuItem` | Define o formato esperado para os dados de uma opção do menu. |
+```ts
+import type { MenuItem } from '@/interfaces/MenuItem'
+```
+Indica que MenuItem é usado somente pelo TypeScript para validar a estrutura dos dados.
 
+Ele não é um componente nem uma função que será executada no navegador.
 
+Neste caso, ele é usado para garantir que a prop item possua a estrutura correta:
+```ts
+item: MenuItem
+```
 
+## 🔄 Estado de abertura do submenu
 
+Cada `AppMenuItem` possui seu próprio estado para saber se o submenu está aberto:
 
+```ts
+const isExpanded = ref(false)
+```
+O `isExpanded` começa com o valor: `false`.
 
+Isso significa que, inicialmente, o submenu fica fechado.
 
+Quando o valor mudar para true, o submenu será exibido.
+- `false` → submenu fechado
+- `true`  → submenu aberto
 
+Como `isExpanded` foi criado com `ref`, no bloco `<script setup>` o valor é alterado usando `.value:`
+```ts
+isExpanded.value = true
+```
+No template, o Vue permite usar apenas o nome:
+```ts
+v-if="isExpanded"
+```
+Cada instância de `AppMenuItem` possui seu próprio `isExpanded`.
 
+Por exemplo:
+- Produtos → aberto
+- Usuários → fechado
+- Relatórios → aberto
 
+Esses estados não interferem uns nos outros, porque cada item do menu é um componente separado.
 
+## 🔍 Identificação de submenu: `hasChildren`
 
+O componente calcula se o item atual possui filhos:
 
+```ts
+const hasChildren = computed(() =>
+    Boolean(props.item.filhos?.length)
+)
+```
+O `hasChildren` terá sempre um valor booleano:
+- `true`  → o item possui ao menos um filho
+- `false` → o item não possui filhos
 
+A verificação usa os dados recebidos pela `prop` `item`:
+```ts
+props.item.filhos
+```
+Exemplo de item com submenu:
+```ts
+{
+    id: 'produtos',
+    titulo: 'Produtos',
+    filhos: [
+        { id: 'produtos-listar', titulo: 'Listar Produtos' },
+        { id: 'produtos-cadastrar', titulo: 'Cadastrar Produto' },
+    ],
+}
+```
+Nesse caso:
+- props.item.filhos.length → 2
+- hasChildren              → true
 
+Exemplo de item sem submenu:
+```ts
+{
+    id: 'home',
+    titulo: 'HOME',
+    rota: '/',
+}
+```
+Como filhos não existe nesse item, temos:
+- hasChildren → false
+
+> 📌 **I M P O R T A N T E**
+>
+> `props.item.filhos?.length`
+>
+> O `?.` é o encadeamento opcional (optional chaining):
+
+Ele evita erro quando a propriedade filhos não existir.
+
+A função `Boolean()` transforma o resultado em true ou false.
+
+o `computed()` é usado porque hasChildren é um valor calculado a partir de outra informação. 
+
+Se os dados de `props.item.filhos` mudarem, o Vue recalcula `hasChildren` automaticamente
+
+## 🔁 Função para abrir e fechar um grupo
+
+A função responsável por alternar o submenu é:
+
+```ts
+function toggleGroup() {
+    isExpanded.value = !isExpanded.value
+}
+```
+Ela altera o estado isExpanded.
+
+O `!` inverte o valor atual:
+- `false → true`
+- `true  → false`
+
+Portanto:
+```
+grupo fechado ► isExpanded = false
+        ↓
+ clique no grupo ► isExpanded = true
+        ↓
+ submenu é exibido
+
+grupo aberto ► isExpanded = true
+        ↓
+ clique no grupo ► isExpanded = false
+        ↓
+ submenu é ocultado
+```
+Como isExpanded foi criado com ref, a alteração ocorre por meio de: `isExpanded.value`
+
+No template, essa função será ligada ao clique do botão do grupo: `@click="toggleGroup"`
+
+O Vue atualiza a lista de submenus automaticamente porque ela depende do valor de `isExpanded`.
+
+## 🧱 Item da lista e nível do menu
+
+Cada opção do menu é envolvida por uma tag `<li>`:
+
+```html
+<li
+    class="app-menu__item"
+    :class="`app-menu__item--level-${level}`"
+>
+```
+A tag `<li>` representa um item de uma lista. 
+
+Ela é usada porque o AppMenu possui uma lista `<ul>`.
+
+A classe fixa:
+```ts
+class="app-menu__item"
+```
+Ela aplica os estilos comuns a todos os itens do menu.
+
+A segunda classe é dinâmica:
+```ts
+:class="`app-menu__item--level-${level}`"
+```
+Ela monta uma classe usando o valor da prop level.
+
+Exemplos:
+- level = 1 → app-menu__item--level-1
+- level = 2 → app-menu__item--level-2
+- level = 3 → app-menu__item--level-3
+
+O uso de crases cria uma template string do JavaScript:
+```ts
+`app-menu__item--level-${level}`
+```
+O trecho `${level}` é substituído pelo valor atual da variável.
+
+Assim, o CSS pode aplicar estilos diferentes para cada profundidade do menu, por exemplo:
+- nível 1 → item principal
+- nível 2 → item com recuo
+- nível 3 → item com recuo maior
+
+Esse padrão permite que o mesmo AppMenuItem seja reutilizado em todos os níveis, sem criar um componente diferente para cada tipo de submenu.
+
+## 🔗 Item com rota: `RouterLink`
+
+O primeiro cenário verifica se o item possui uma rota:
+
+```html
+<RouterLink
+    v-if="item.rota"
+        class="app-menu__link"
+        :to="item.rota"
+        @click="notifyNavigation"
+>
+``` 
+O `v-if="item.rota"` significa:
+
+> 📌 Renderize este link somente se o objeto item possuir uma rota.
+
+Exemplo:
+```ts
+{
+    id: 'produtos-listar',
+    titulo: 'Listar Produtos',
+    rota: '/produtos',
+}
+```
+Como esse item possui:
+```ts
+rota: '/produtos'
+```
+Ele será renderizado como um `RouterLink`.
+
+`RouterLink` é o componente do Vue Router usado para navegar entre páginas da própria aplicação.
+```ts
+:to="item.rota"
+```
+Ele envia a rota recebida no objeto atual para o link.
+
+Neste exemplo, o resultado é uma navegação para: `/produtos`
+
+O `:` informa que to recebe o valor real de `item.rota`.
+
+O clique também chama: `@click="notifyNavigation"`
+
+A classe `app-menu__link` aplica os estilos visuais desse link.
+
+## 🎨 Ícone e título do item
+
+Dentro do `RouterLink`, o componente exibe o ícone e o título:
+
+```html
+<i
+    v-if="item.icone"
+    :class="['bi', item.icone]"
+    aria-hidden="true"
+></i>
+
+<span class="app-menu__label">
+    {{ item.titulo }}
+</span>
+```
+O ícone só é renderizado quando o item possui a propriedade icone:
+```ts
+v-if="item.icone"
+```
+Exemplo:
+```ts
+{
+    titulo: 'Listar Produtos',
+    icone: 'bi-box-seam',
+}
+```
+A classe do ícone é montada como uma lista:
+```ts
+:class="['bi', item.icone]"
+```
+Nesse exemplo, o resultado será:
+```ts
+class="bi bi-box-seam"
+```
+> `bi` identifica a biblioteca Bootstrap Icons;
+> `item.icone` informa qual ícone deve ser exibido.
+
+O título é exibido por interpolação:` {{ item.titulo }}`
 
 
 
