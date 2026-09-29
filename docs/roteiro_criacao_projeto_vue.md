@@ -522,7 +522,7 @@ Portanto, este caminho:
 
 `@/components/layout/AppLayout.vue`
 
-Significa:
+<b><font color="red">Significa:</font></b>
 
 `src/components/layout/AppLayout.vue`
 
@@ -1028,7 +1028,7 @@ O `AppTopBar.vue` não abre nem fecha o menu diretamente.
 
 Ele só transporta o aviso de que o botão foi clicado.
 
-O evento que esta sendo criado em ToBarSistema.vue vai ter o seguinte fluxo:
+O evento que esta sendo criado em TopBarSistema.vue vai ter o seguinte fluxo:
 
 ```
 TopBarSistema emite
@@ -2200,7 +2200,8 @@ AppMenuItem
 └── grupo com filhos
     └── AppMenuItem para cada filho
 ```
-### 📥 Propriedades recebidas
+
+## 📥 Propriedades recebidas
 
 O componente recebe duas props:
 ```ts
@@ -2733,7 +2734,7 @@ const hasChildren = computed(() =>
 ```
 Esse valor identifica se o item atual possui filhos e deve se comportar como grupo.
 
-#### Componentes recursivos
+### Componentes recursivos
 Quando o item possui filhos e está aberto, o componente renderiza novos `AppMenuItem`:
 ```html
 <AppMenuItem
@@ -2760,3 +2761,426 @@ Quando uma pessoa clica em um link:
 - AppMenu percorre os itens.
 - AppMenuItem renderiza cada item.
 - O próprio AppMenuItem renderiza os filhos quando existirem.
+
+# 9. ⚙️ Configuração do menu: `menu.ts`
+
+## 🎯 Responsabilidade
+O arquivo: `src/config/menu.ts`
+- Define as opções que devem aparecer no menu da aplicação.
+- Ele não renderiza HTML, não controla cliques e não decide como o submenu abre.
+- Sua responsabilidade é somente fornecer os dados que descrevem a estrutura da navegação.
+```
+menu.ts 
+    ↓ fornece MENU
+AppMenu.vue
+    ↓ percorre os itens
+AppMenuItem.vue
+    ↓ renderiza cada item e seus filhos
+```
+o projeto, a configuração é exportada assim:
+```ts
+export const MENU: MenuItem[] = [
+    // opções do menu
+]
+```
+`MENU` é uma constante que guarda uma lista de objetos.
+
+Cada objeto representa uma opção do menu, como:
+- Home;
+- Produtos;
+- Listar Produtos.
+
+O tipo `MenuItem[]` informa que essa lista deve conter somente objetos no formato definido pela interface `MenuItem`.
+
+Separar essa estrutura em `menu.ts` permite adicionar ou alterar opções sem precisar mexer nos componentes visuais do menu.
+
+## 🧾 Tipo usado na configuração: `MenuItem`
+
+No início de `menu.ts`, temos:
+
+```ts
+import type { MenuItem } from '@/interfaces/MenuItem'
+```
+Esse import traz somente uma interface TypeScript.
+
+`MenuItem` não é um componente e não executa nenhuma ação no navegador. 
+
+Ele define quais propriedades uma opção do menu pode possuir.
+
+Depois, o tipo é aplicado à constante:
+
+```ts
+export const MENU: MenuItem[] = [
+    // opções do menu
+]
+```
+O `[]` significa que MENU é uma lista de itens.
+- `MenuItem`   → um único objeto de menu
+- `MenuItem[]` → uma lista de objetos de menu
+
+Assim, o TypeScript verifica a configuração antes de a aplicação rodar.
+
+Por exemplo, se uma opção possuísse uma rota numérica:
+```ts
+{
+    id: 'home',
+    titulo: 'Home',
+    rota: 123,
+}
+```
+O TypeScript apontaria <b><font color="red">E R R O</font></b>, porque a rota deve ser um texto.
+
+A estrutura completa de MenuItem será estudada em um tópico próprio, depois que terminarmos a configuração `MENU`.
+
+## 🏠 Primeiro item: `Home`
+
+A primeira opção da configuração é:
+
+```ts
+{
+    id: 'home',
+    titulo: 'Home',
+    icone: 'bi-house',
+    rota: '/',
+}
+``` 
+Esse objeto representa um item simples de navegação.
+| Propriedade | Valor | Função |
+| --- | --- | --- |
+| `id` | `'home'` | Identificador único do item. |
+| `titulo` | `'Home'` | Texto exibido no menu. |
+| `icone` | `'bi-house'` | Ícone de casa do Bootstrap Icons. |
+| `rota` | `'/'` | URL interna para a qual o link navega. |
+
+Como esse item possui: `rota: '/'`
+
+O AppMenuItem o renderiza como um `RouterLink`.
+```
+MENU
+        ↓
+item Home possui rota
+        ↓
+AppMenuItem usa RouterLink
+        ↓
+pessoa clica em Home
+        ↓
+Vue Router navega para /
+```
+A rota `/` representa a página inicial da aplicação.
+
+## 📦 Segundo item: grupo `Produtos`
+
+A segunda opção é um grupo de menu:
+
+```ts
+{
+    id: 'produtos',
+    titulo: 'Produtos',
+    icone: 'bi-box-seam',
+    filhos: [
+        {
+            id: 'produtos-listagem',
+            titulo: 'Listar Produtos',
+            icone: 'bi-list-ul',
+            rota: '/produtos',
+        },
+    ],
+}
+```
+Diferente de Home, esse item não possui rota própria.
+
+Em vez disso, ele possui: `hasChildren = true`
+
+E o renderiza como botão de grupo, não como `RouterLink`.
+```
+Produtos
+↓ clique
+abre o submenu
+↓
+Listar Produtos
+```
+O item dentro de filhos é um item comum de navegação:
+```ts
+{
+    id: 'produtos-listagem',
+    titulo: 'Listar Produtos',
+    icone: 'bi-list-ul',
+    rota: '/produtos',
+}
+```
+Como ele possui rota, será renderizado como link.
+
+A configuração forma esta estrutura:
+```
+Produtos
+└── Listar Produtos
+    └── rota: /produtos
+```
+
+## 📝 Resumo geral: menu guiado por configuração
+
+`menu.ts` separa os dados da navegação dos componentes visuais.
+
+```text
+menu.ts
+→ descreve os itens do menu
+
+AppMenu.vue
+→ percorre a lista MENU
+
+AppMenuItem.vue
+→ decide como renderizar cada item
+```
+A lista é declarada assim:
+```ts
+export const MENU: MenuItem[] = [
+    // itens do menu
+]
+```
+Cada objeto pode assumir dois formatos principais.
+
+### Item com rota
+```ts
+{
+    id: 'home',
+    titulo: 'Home',
+    icone: 'bi-house',
+    rota: '/',
+}
+```
+Esse item é renderizado como um link.
+
+### Item com filhos
+```ts
+{
+    id: 'produtos',
+    titulo: 'Produtos',
+    icone: 'bi-box-seam',
+    filhos: [
+        {
+            id: 'produtos-listagem',
+            titulo: 'Listar Produtos',
+            icone: 'bi-list-ul',
+            rota: '/produtos',
+        },
+    ],
+}
+```
+Esse item é renderizado como um grupo que abre e fecha um submenu.
+
+### Regra para ampliar o menu
+
+Para criar uma nova opção principal, adicione um objeto à lista `MENU`.
+
+Para criar um submenu, adicione objetos dentro de filhos.
+```
+MENU
+├── Home
+├── Produtos
+│   ├── Listar Produtos
+│   └── Cadastrar Produto
+└── Usuários
+    └── Listar Usuários
+```
+> 📌 Os componentes não precisam ser alterados para aceitar essas novas opções.
+> 
+> Essa é a vantagem de usar uma configuração combinada com um componente recursivo.
+
+# 10. 🖼️ Interface de um item de menu: `MenuItem.ts`
+
+## 🎯 Responsabilidade
+
+O arquivo ` src/interfaces/MenuItem.ts` define o formato que cada objeto do menu deve seguir.
+```ts
+export interface MenuItem {
+    id: string
+    titulo: string
+    icone?: string
+    rota?: string
+    filhos?: MenuItem[]
+}
+```
+Uma interface é um contrato do TypeScript.
+
+Ela informa:
+> 📌 Todo objeto tratado como MenuItem precisa possuir determinadas propriedades, com os tipos definidos.
+
+Neste projeto, a interface é usada pela configuração:
+```ts
+export const MENU: MenuItem[] = [
+    // itens do menu
+]
+```
+> 🖐 Assim, o TypeScript verifica se cada opção de MENU possui uma estrutura válida antes de a aplicação ser executada.
+> 
+> 🖐 A interface não cria HTML, não aparece no navegador e não executa funções. 
+> 
+> 🖐 Ela existe para organizar e validar os dados usados pelo código.
+
+## 🏷️ Propriedades obrigatórias e opcionais
+
+A interface possui estas propriedades:
+
+```ts
+export interface MenuItem {
+    id: string
+    titulo: string
+    icone?: string
+    rota?: string
+    filhos?: MenuItem[]
+}
+```
+| Propriedade | Tipo | Obrigatória? | Função |
+| --- | --- | --- | --- |
+| `id` | `string` | Sim | Identifica o item de forma única. |
+| `titulo` | `string` | Sim | Texto exibido no menu. |
+| `icone` | `string` | Não | Nome do ícone Bootstrap Icons. |
+| `rota` | `string` | Não | Caminho usado pelo `RouterLink`. |
+| `filhos` | `MenuItem[]` | Não | Lista de itens internos do submenu. |
+
+As propriedades sem `?` são obrigatórias:
+```ts
+id: string
+titulo: string
+```
+Todo item do menu precisa ter, no mínimo, um identificador e um título.
+
+O `?` torna uma propriedade opcional:
+```ts
+{
+icone?: string
+rota?: string
+filhos?: MenuItem[]
+}
+```
+Um grupo de submenu precisa de filhos:
+```ts
+{
+    id: 'produtos',
+    titulo: 'Produtos',
+    filhos: [],
+}
+```
+O item não precisa ter rota e filhos ao mesmo tempo.
+
+## 🌳 Propriedade recursiva: `filhos`
+
+A propriedade:
+
+```ts
+filhos?: MenuItem[]
+```
+<b><font color="red">Significa:</font></b>
+
+> 📌 Um item pode possuir, opcionalmente, uma lista de outros itens que seguem exatamente o mesmo formato MenuItem.
+
+A parte: `MenuItem` representa uma lista de itens de menu.
+
+Por isso, um grupo pode conter links:
+```ts
+{
+    id: 'produtos',
+    titulo: 'Produtos',
+    filhos: [
+        {
+            id: 'produtos-listagem',
+            titulo: 'Listar Produtos',
+            rota: '/produtos',
+        },
+    ],
+}
+```
+E um item dentro de filhos também pode possuir seus próprios filhos:
+```ts
+{
+    id: 'produtos',
+    titulo: 'Produtos',
+    filhos: [
+        {
+            id: 'categorias',
+            titulo: 'Categorias',
+            filhos: [
+                {
+                    id: 'categorias-listagem',
+                    titulo: 'Listar Categorias',
+                    rota: '/categorias',
+                },
+            ],
+        },
+    ],
+}
+```
+Isso forma uma estrutura em árvore:
+```
+Produtos
+└── Categorias
+    └── Listar Categorias
+```
+A interface permite essa estrutura porque ela referencia a si mesma:
+```ts
+filhos?: MenuItem[]
+```
+Essa propriedade é a base de qualquer menu com vários níveis.
+
+## 📝 Resumo geral: interface como contrato de dados
+
+`MenuItem` é uma interface TypeScript que define o formato esperado para cada opção de menu.
+
+```ts
+export interface MenuItem {
+    id: string
+    titulo: string
+    icone?: string
+    rota?: string
+    filhos?: MenuItem[]
+}
+``` 
+A interface não cria interface visual nem executa lógica. 
+
+Ela serve para validar os dados antes de a aplicação rodar.
+
+### Propriedades obrigatórias
+```ts
+id: string
+titulo: string
+```
+Todo item deve possuir um identificador único e um título.
+
+### Propriedades opcionais
+```ts
+icone?: string
+rota?: string
+filhos?: MenuItem[]
+```
+O `?` informa que a propriedade pode não existir.
+
+Isso permite que diferentes tipos de item utilizem o mesmo contrato:
+```
+item com rota
+→ possui rota
+→ renderizado como link
+
+item com submenu
+→ possui filhos
+→ renderizado como grupo
+```
+
+### Estrutura recursiva
+```ts
+filhos?: MenuItem[]
+```
+<b><font color="red">Significa:</font></b>
+
+> 📌 Um item pode conter outros itens do mesmo tipo.
+```
+MenuItem
+└── filhos: MenuItem[]
+    └── filhos: MenuItem[]
+```
+Esse padrão é a base para menus com dois, três ou mais níveis.
+
+### Ideia principal
+- A interface padroniza os dados.
+- A configuração MENU fornece esses dados.
+- AppMenu e AppMenuItem usam esses dados para montar a navegação.
+
