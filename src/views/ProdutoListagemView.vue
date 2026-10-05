@@ -1,10 +1,15 @@
 <script setup lang="ts">
 
     import {ref,onMounted,computed}     from 'vue';
-    import type {Produto}       from '@/interfaces/Produto';
-    import {ProductService}     from '@/services/ProductService';
-    import {AxiosHttpClient}    from '@/infra/http/AxiosHttpClient';
-    import {QTDE_PROD_PAGINA,QTDE_PAGINAS_VISIVEIS}   from '@/constants/constants';
+    import type {Produto}               from '@/interfaces/Produto';
+    import {ProductService}             from '@/services/ProductService';
+    import {AxiosHttpClient}            from '@/infra/http/AxiosHttpClient';
+    import type {ProdutoCategoria}      from '@/interfaces/ProdutoCategoria';
+    
+    // constantes
+    import {    QTDE_PROD_PAGINA,
+                QTDE_PAGINAS_VISIVEIS
+            }                           from '@/constants/constants';
 
     const httpClient        =   new AxiosHttpClient();
     const productService    =   new ProductService(httpClient);
@@ -20,6 +25,7 @@
 
     /*----- dados -----*/
     const produtos          =   ref<Produto[]>([]);
+    const categorias        =   ref<ProdutoCategoria[]>([]);
 
     /*----- estado da pagina -----*/
     const carregando        =   ref(false);
@@ -77,6 +83,10 @@
         };
     }
 
+    async function carregarCategorias()
+    {
+        categorias.value = await productService.listarCategorias();
+    }
 
     async function carregarProdutos()
     {
@@ -171,6 +181,7 @@
     onMounted(async () => {
 
         carregarProdutos();
+        carregarCategorias();
     });
 
 </script>
@@ -179,16 +190,27 @@
 
     <h1>Produtos</h1>
 
-    <div>
-        <label>Buscar Produto</label>
-        <input type="text" v-model="textoPesquisa">
-        <button @click="produtosPesquisa">Buscar</button>
+<div class="mb-3">
+    <label for="texto-pesquisa" class="form-label">
+        Buscar produto
+    </label>
+
+    <div class="input-group">
+        <input id="texto-pesquisa" v-model="textoPesquisa" type="text" class="form-control" >
+
+        <button type="button" class="btn btn-primary" @click="produtosPesquisa">
+            Buscar
+        </button>
     </div>
+</div>
 
     <div>
         <label>Categoria</label>
         <select v-model="categoriaSelecionada">
             <option value="">Todas</option>
+            <option v-for="categoria in categorias" :key="categoria.codigo" :value="categoria.codigo">
+                {{ categoria.nome }}
+            </option>
         </select>
     </div>
 
@@ -212,12 +234,24 @@
 
     <p v-if="carregando"> Carregando...</p>
 
-    <div v-for="produto in produtos":key="produto.id">
-        <p>📦 {{ produto.nome }}</p>
-        <p>📂 {{ produto.categoria }}</p>
-        <p>💲 {{ produto.preco }}</p>
-        <p>📦 Estoque:{{ produto.estoque }} {{ produto.unidadeMedida }}</p>
-        <hr>
-    </div>
+<table class="table table-striped w-100">
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr v-for="produto in produtos" :key="produto.id">
+            <td>{{ produto.nome }}</td>
+            <td>{{ produto.categoria }}</td>
+            <td>$ {{ produto.preco }}</td>
+            <td>{{ produto.estoque }} {{ produto.unidadeMedida }}</td>
+        </tr>
+    </tbody>
+</table>
 
 </template>

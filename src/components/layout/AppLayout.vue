@@ -1,33 +1,41 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+    import { ref } from 'vue'
+    import AppContent from './AppContent.vue'
+    import AppFooter from './AppFooter.vue'
+    import AppMenu from './AppMenu.vue'
+    import AppTopBar from './AppTopBar.vue'
 
-import AppContent from './AppContent.vue'
-import AppFooter from './AppFooter.vue'
-import AppMenu from './AppMenu.vue'
-import AppTopBar from './AppTopBar.vue'
+    const mobileBreakpoint      =   window.matchMedia('(max-width: 991.98px)',)
+    const isMobileMenuOpen      =   ref(false)
+    const isDesktopMenuCollapsed=   ref(false)
 
-const mobileBreakpoint      =   window.matchMedia('(max-width: 991.98px)',)
-const isMobileMenuOpen      =   ref(false)
-const isDesktopMenuCollapsed=   ref(false)
-
-function toggleMenu() 
-{
-    if (mobileBreakpoint.matches) 
+    function toggleMenu() 
     {
-        isMobileMenuOpen.value = !isMobileMenuOpen.value
-        return
+        if (mobileBreakpoint.matches) 
+        {
+            isMobileMenuOpen.value = !isMobileMenuOpen.value
+            return
+        }
+
+        isDesktopMenuCollapsed.value = !isDesktopMenuCollapsed.value
     }
 
-    isDesktopMenuCollapsed.value = !isDesktopMenuCollapsed.value
-}
-
-function closeMobileMenu()
-{
-    if (mobileBreakpoint.matches)
+    /***
+     * @description Fecha o menu mobile
+     * Ela é usada em dois momentos:
+     *      quando a pessoa clica no fundo escurecido atrás do menu;
+     *      quando a pessoa navega para uma página pelo menu.
+     *      quando em desktop, ela não faz nada, 
+     *          pois o menu lateral não funciona como um painel que
+     *         abre e fecha sobre o conteúdo.
+     */
+    function closeMobileMenu()
     {
-        isMobileMenuOpen.value = false
+        if (mobileBreakpoint.matches)
+        {
+            isMobileMenuOpen.value = false
+        }
     }
-}
 
 </script>
 

@@ -24,7 +24,7 @@ export class AxiosHttpClient implements HttpClient
                                     valor: "unknown": de tipo desconhecido
         */
 
-        const response = await axiosInstance.get(url,{params}); /*-- url é dada pela variavel PRODUTOS_ENDPOINT,  params = objeto --*/ 
+        const response = await axiosInstance.get(url,{params}); 
         return {
             data:   response.data as T,
             status: response.status,

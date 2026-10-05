@@ -4,7 +4,13 @@ import type {Produto}                                   from '@/interfaces/Produ
 import type {ProdutoRespostaListagem}                   from "@/interfaces/ProdutoRespostaListagem";
 import type {ProdutoFiltro}                             from '@/interfaces/ProdutoFiltro';
 import type {ProdutoResultadoBusca}                     from "@/interfaces/ProdutoResultadoBusca";
-import {PRODUTOS_ENDPOINT,PRODUTOS_PESQUISA_ENDPOINT}   from '@/constants/constants'; /* não usa o type porque é uma constant */
+import {    PRODUTOS_ENDPOINT,
+            PRODUTOS_PESQUISA_ENDPOINT,
+            PRODUTOS_CATEGORIAS_ENDPOINT
+        }                                               from '@/constants/constants'; /* não usa o type porque é uma constant */
+
+import type {ProdutoCategoria} from '@/interfaces/ProdutoCategoria';
+import type {ProdutoRespostaCategoria} from '@/interfaces/ProdutoRespostaCategoria';
 
 
 
@@ -29,78 +35,96 @@ export class ProductService
      *          delete()
      * --------------------------------------------------------------------------------------------
      * 
-    */
+     */
+    /*--------------------------------------*/
+
     constructor(private readonly httpClient: HttpClient) 
     {
 
     }
 
-    private converterProduto(produtoApi: any): Produto 
-    {
+    /* ----- dicionario de nomes para produtos ----- */
+        private converterProduto(produtoApi: any): Produto 
+        {
 
-        return {
-            id:             produtoApi.id,
-            nome:           produtoApi.title,
-            descricao:      produtoApi.description,
-            categoria:      produtoApi.category,
-            preco:          produtoApi.price,
-            estoque:        produtoApi.stock,
-            unidadeMedida:  'UN',
-            imagem:         produtoApi.thumbnail,
-            estoqueMinimo:  5
-        };
+            return {
+                id:             produtoApi.id,
+                nome:           produtoApi.title,
+                descricao:      produtoApi.description,
+                categoria:      produtoApi.category,
+                preco:          produtoApi.price,
+                estoque:        produtoApi.stock,
+                unidadeMedida:  'UN',
+                imagem:         produtoApi.thumbnail,
+                estoqueMinimo:  5
+            };
 
-    }
+        }
 
-    /**
-     * 
-     * @param filtro 
-     * 
-     * 
-     */
-    async listarProdutos(filtro: ProdutoFiltro):Promise<ProdutoResultadoBusca> 
-    {
+        /**
+         * 
+         * @param filtro 
+         * 
+         * 
+         */
+        async listarProdutos(filtro: ProdutoFiltro):Promise<ProdutoResultadoBusca> 
+        {
 
-        const limit         =   filtro.quantidadePorPagina;
-        const skip          =   (filtro.paginaAtual - 1) * filtro.quantidadePorPagina;
-        const params        =   {limit,skip};   /* um objeto */ 
-        
-        /* ------------------------------ trabalhando com o retorno da API ------------------------------- */
-        const response      =   await this.httpClient.get<ProdutoRespostaListagem>(PRODUTOS_ENDPOINT,params);   /* chamada da API com o GET     */ 
-        const produtos      =   response.data.products.map(produtoApi => this.converterProduto(produtoApi));    /* conversão dos nomes          */
-        const totalPaginas  =   Math.ceil(response.data.total / filtro.quantidadePorPagina);                    /* arredondamento para maior    */
+            const limit         =   filtro.quantidadePorPagina;
+            const skip          =   (filtro.paginaAtual - 1) * filtro.quantidadePorPagina;
+            const params        =   {limit,skip};   /* um objeto */ 
+            
+            /* ------------------------------ trabalhando com o retorno da API ------------------------------- */
+            const response      =   await this.httpClient.get<ProdutoRespostaListagem>(PRODUTOS_ENDPOINT,params);   /* chamada da API com o GET     */ 
+            const produtos      =   response.data.products.map(produtoApi => this.converterProduto(produtoApi));    /* conversão dos nomes          */
+            const totalPaginas  =   Math.ceil(response.data.total / filtro.quantidadePorPagina);                    /* arredondamento para maior    */
 
-        /* --------------------------------- fazendo o retorno dos dados  -------------------------------- */
-        return {
-              produtos,
-              totalRegistros: response.data.total,
-              paginaAtual: filtro.paginaAtual,
-              quantidadePorPagina: filtro.quantidadePorPagina,
-              totalPaginas
-        };
-    }
+            /* --------------------------------- fazendo o retorno dos dados  -------------------------------- */
+            return {
+                produtos,
+                totalRegistros: response.data.total,
+                paginaAtual: filtro.paginaAtual,
+                quantidadePorPagina: filtro.quantidadePorPagina,
+                totalPaginas
+            };
+        }
 
-    async pesquisarProdutos(filtro: ProdutoFiltro): Promise<ProdutoResultadoBusca>
-    {
+        async pesquisarProdutos(filtro: ProdutoFiltro): Promise<ProdutoResultadoBusca>
+        {
 
-        const limit =   filtro.quantidadePorPagina;
-        const skip  =   (filtro.paginaAtual - 1) * filtro.quantidadePorPagina;
-        const params=   {q: filtro.textoPesquisa,limit,skip};
+            const limit =   filtro.quantidadePorPagina;
+            const skip  =   (filtro.paginaAtual - 1) * filtro.quantidadePorPagina;
+            const params=   {q: filtro.textoPesquisa,limit,skip};
 
-        /* ------------------------------ trabalhando com o retorno da API ------------------------------- */
-        const response      =   await this.httpClient.get<ProdutoRespostaListagem>(PRODUTOS_PESQUISA_ENDPOINT,params);
-        const totalPaginas  =   Math.ceil(response.data.total / filtro.quantidadePorPagina);
-        const produtos      =   response.data.products.map(produtoApi => this.converterProduto(produtoApi));
+            /* ------------------------------ trabalhando com o retorno da API ------------------------------- */
+            const response      =   await this.httpClient.get<ProdutoRespostaListagem>(PRODUTOS_PESQUISA_ENDPOINT,params);
+            const totalPaginas  =   Math.ceil(response.data.total / filtro.quantidadePorPagina);
+            const produtos      =   response.data.products.map(produtoApi => this.converterProduto(produtoApi));
 
-        /* --------------------------------- fazendo o retorno dos dados  -------------------------------- */
-        return {
-            produtos,
-            totalRegistros: response.data.total,
-            paginaAtual: filtro.paginaAtual,
-            quantidadePorPagina: filtro.quantidadePorPagina,
-            totalPaginas
-        };
+            /* --------------------------------- fazendo o retorno dos dados  -------------------------------- */
+            return {
+                produtos,
+                totalRegistros: response.data.total,
+                paginaAtual: filtro.paginaAtual,
+                quantidadePorPagina: filtro.quantidadePorPagina,
+                totalPaginas
+            };
 
-    }
+        }
 
+    /* ----- dicionário de nomes para categorias dos produtos ----- */
+        private converterCategoria(categoriaApi: ProdutoRespostaCategoria): ProdutoCategoria
+        {
+            return {
+                codigo: categoriaApi.slug,
+                nome: categoriaApi.name
+            };
+        }
+
+        async listarCategorias(): Promise<ProdutoCategoria[]>
+        {
+            const response = await this.httpClient.get<ProdutoRespostaCategoria[]>(PRODUTOS_CATEGORIAS_ENDPOINT);
+
+            return response.data.map(categoriaApi => this.converterCategoria(categoriaApi));
+        }
 }
